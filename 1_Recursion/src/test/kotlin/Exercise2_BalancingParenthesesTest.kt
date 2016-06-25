@@ -14,6 +14,10 @@ class BalancingParenthesesTest {
         assertFalse(balance("("))
     }
 
+    @Test fun string_with_only_closing_parentheses_shouldnt_be_balanced() {
+        assertFalse(balance(")"))
+    }
+
     @Test fun string_with_only_opening_parentheses_and_other_chars_shouldnt_be_balanced() {
         assertFalse(balance("a(b"))
     }

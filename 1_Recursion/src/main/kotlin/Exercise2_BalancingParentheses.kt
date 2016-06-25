@@ -1,5 +1,5 @@
 
-/** Checks if parentheses are balanced */
+/** Checks if parentheses are balanced in a string*/
 
 fun balance(str: String) = balance(str.toList())
 
