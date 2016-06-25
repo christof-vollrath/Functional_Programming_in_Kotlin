@@ -18,12 +18,11 @@ class PascalsTriangleTest {
     }
 
     @Test fun print_triangle() {
-        for(r in 0..4) {
-            for (c in 0..4) {
-                val p = pascal(c, r)
-                print(if (p == 0) " " else "$p")
-            }
-            println()
-        }
+        val pascal = printPascal(4, 4)
+        println(); println("Pascal's triangle:"); println(pascal)
+        assertEquals(
+            " 1             \n 1  1          \n 1  2  1       \n 1  3  3  1    \n 1  4  6  4  1 \n",
+            pascal)
+
     }
 }
