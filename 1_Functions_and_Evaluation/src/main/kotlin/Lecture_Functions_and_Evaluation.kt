@@ -1,9 +1,23 @@
-//TODO Delayed Evaluation in Kotlin using closures
+/**
+ * Kotlin doesn't have lazy parameter evaluation or call-by-name.
+ * But this can be simulated through closures.
+ */
 
-// TODO def and(x,y) = x && y // without &&
-def and(x: Boolean, y: => Boolean) = if (x) y else false
-def and(x: Boolean, y: => Boolean) = if (x) y else false
-// TODO def or(x,y) = y || y
+tailrec fun loop(): Boolean = loop() // Don't call loop, it never terminates
+// Without tailrec it would throw a stack overflow, but with tailrec is an endless loop
+
+fun ignoreParameter(p: Boolean) {}
+fun ignoreParameterWithClosure(p: ()->Boolean) {}
+
+/**
+ * && and || can be implemented as functions.
+ * But second parameter must be call-by-name since it might not be evaluated
+ */
+
+fun conditionalAnd(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) p2() else false
+fun conditionalOr(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) true else p2()
+
+/*
 //TODO Newton Method
 def abs(x:Double) = if (x < 0) -x else x
 
@@ -37,3 +51,4 @@ def factorial2(n: Int): Int = { // Tail recursive
     loop(1, n)
 }
 factorial2(3)
+*/
