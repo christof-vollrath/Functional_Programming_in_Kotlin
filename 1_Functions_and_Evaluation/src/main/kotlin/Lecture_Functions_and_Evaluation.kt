@@ -38,7 +38,7 @@ private fun improve(guess: Double, x: Double): Double  = (guess + x / guess) / 2
 
 
 Tail recursion
-Eucid's algorithm gcd greates common divisor
+Eucid's algorithm gcd greatest common divisor
         def gcd(a: Int, b: Int): Int =
             if (b== 0) a else gcd(b, a % b)
 

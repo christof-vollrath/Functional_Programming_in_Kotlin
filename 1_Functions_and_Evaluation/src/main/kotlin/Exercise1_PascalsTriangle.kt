@@ -1,4 +1,4 @@
-/** Creates Pasccal's triangle
+/** Creates Pascal's triangle
  *  Like
  * 1
  * 1  1
@@ -19,7 +19,7 @@ fun printPascal(column: Int, row: Int): String {
     for(r in 0..row) {
         for (c in 0..column) {
             val p = pascal(c, r)
-            result.append(if (p == 0) "   " else " ${p} ")
+            result.append(if (p == 0) "   " else " $p ")
         }
         result.append('\n')
     }
