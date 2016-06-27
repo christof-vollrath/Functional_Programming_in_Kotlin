@@ -1,3 +1,4 @@
+import java.lang.Math.*
 /**
  * Kotlin doesn't have lazy parameter evaluation or call-by-name.
  * But this can be simulated through closures.
@@ -14,25 +15,26 @@ fun ignoreParameterWithClosure(p: ()->Boolean) {}
  * But second parameter must be call-by-name since it might not be evaluated
  */
 
-fun conditionalAnd(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) p2() else false
-fun conditionalOr(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) true else p2()
+inline fun conditionalAnd(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) p2() else false
+inline fun conditionalOr(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) true else p2()
+
+// Newton's method to calculate square root
+
+fun sqrt(x: Double): Double = sqrt(x, 1.0)
+
+private tailrec fun sqrt(x: Double, guess: Double) : Double =
+    if (abs(x) < 0.000001) 0.0
+    else
+        if (guessIsGoodEnough(guess, x)) guess
+        else sqrt(x, improve(guess, x))
+
+private fun guessIsGoodEnough(guess: Double, x: Double) =
+    abs(guess * guess - x) / x < 0.000001
+
+private fun improve(guess: Double, x: Double): Double  = (guess + x / guess) / 2
+    // See: https://de.wikipedia.org/wiki/Newton-Verfahren#Berechnung_der_Quadratwurzel
 
 /*
-//TODO Newton Method
-def abs(x:Double) = if (x < 0) -x else x
-
-def sqrt(x: Double) = {
-    def sqrtIter(guess: Double, x: Double): Double =
-    if (isGoodEnough(guess, x)) guess
-    else sqrtIter(improve(guess, x), x)
-
-    def isGoodEnough(guess: Double, x: Double) = abs(guess * guess -x) / x < 0.001
-
-    def improve(guess: Double, x: Double) =(guess + x / guess) / 2
-
-    sqrtIter(1.0, x)
-}
-Nesting functions in functions
 
 
 Tail recursion
