@@ -23,34 +23,90 @@ inline fun conditionalOr(p1: Boolean, p2: ()->Boolean): Boolean = if (p1) true e
 fun sqrt(x: Double): Double = sqrt(x, 1.0)
 
 private tailrec fun sqrt(x: Double, guess: Double) : Double =
-    if (abs(x) < 0.000001) 0.0
+    if (abs(x) < SQRT_DELTA) 0.0
     else
         if (guessIsGoodEnough(guess, x)) guess
         else sqrt(x, improve(guess, x))
 
 private fun guessIsGoodEnough(guess: Double, x: Double) =
-    abs(guess * guess - x) / x < 0.000001
+    abs(guess * guess - x) / x < SQRT_DELTA
 
 private fun improve(guess: Double, x: Double): Double  = (guess + x / guess) / 2
     // See: https://de.wikipedia.org/wiki/Newton-Verfahren#Berechnung_der_Quadratwurzel
 
-/*
+private val SQRT_DELTA = 0.00000001
 
 
-Tail recursion
-Eucid's algorithm gcd greatest common divisor
-        def gcd(a: Int, b: Int): Int =
-            if (b== 0) a else gcd(b, a % b)
+// Tail recursion
 
-Factorial
-        def factorial(n: Int): Int =
-            if (n == 0) 1 else n*factorial(n-1)
+// Eucid's algorithm gcd greatest common divisor
+//-----------------------------------------------
 
-def factorial2(n: Int): Int = { // Tail recursive
-    def loop(acc: Int, n: Int): Int =
-    if (n == 0) acc else loop(acc*n, n-1)
-
-    loop(1, n)
+fun gcd(a: Int, b: Int): Int {
+    if (a == 0 || b == 0) throw IllegalArgumentException("Gcd can not be caluclated for 0")
+    return calcGcd(a, b)
 }
-factorial2(3)
-*/
+
+tailrec fun calcGcd(a: Int, b: Int): Int =
+    if (b == 0) a else calcGcd(b, a % b)
+
+// Factorial recursive and tail recursive
+
+// Factorial is one of the classical examples for recursion
+// but a very bad example for it.
+// The most efficient implementation would be a table look up
+
+// Factorial recursive
+
+fun factorial(n: Int): Int =
+    if (n == 0) 1 else n * factorial(n-1)
+
+// Factorial tail recursive
+
+fun factorial2(n: Int): Int =
+    factorialLoop(1, n)
+
+tailrec fun factorialLoop(acc: Int, n: Int): Int =
+    if (n == 0) acc else factorialLoop(acc * n, n-1)
+
+// Factorial iterative
+
+fun factorial3(n: Int): Int {
+    var res = 1
+    for(i in 2..n) res *= i
+    return res
+}
+
+fun createFactorialTable(): String {
+    val tableBuilder = StringBuilder()
+    (0..13).forEach {
+        tableBuilder.append("        $it -> ${factorial(it)}\n")
+    }
+    return """fun factorial4(n: Int): Int = // Created by createFactorialTable
+    when(n) {
+${tableBuilder.toString()}
+        else -> throw IllegalArgumentException("Number to big")
+    }
+
+"""
+    }
+
+fun factorial4(n: Int): Int = // Created by createFactorialTable
+        when(n) {
+            0 -> 1
+            1 -> 1
+            2 -> 2
+            3 -> 6
+            4 -> 24
+            5 -> 120
+            6 -> 720
+            7 -> 5040
+            8 -> 40320
+            9 -> 362880
+            10 -> 3628800
+            11 -> 39916800
+            12 -> 479001600
+            13 -> 1932053504
+
+            else -> throw IllegalArgumentException("Number to big")
+        }
