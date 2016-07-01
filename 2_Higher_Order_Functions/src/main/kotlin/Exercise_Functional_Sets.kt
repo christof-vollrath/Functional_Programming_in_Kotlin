@@ -3,7 +3,7 @@
 
 // Sets defined through functions
 
-// Kotlin doesn't have type aliases, therefore a data class is needed to hold the type
+// Kotlin 1.0 doesn't yet have type aliases, therefore a data class is needed to hold the type
 
 data class FunctionalSet(val check: (Int) -> Boolean )
 
@@ -24,7 +24,7 @@ fun diff(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSe
 // 2.2 Queries and Transformations on Sets
 
 fun forall(set: FunctionalSet, function: (Int) -> Boolean): Boolean =
-    inforall(set, function, -1000, 1000)
+    inforall(set, function, -1000, 1000) // Here, we consider that an integer x has the property -1000 <= x <= 1000 in order to limit the search space
 
 private fun inforall(set: FunctionalSet, function: (Int) -> Boolean, a: Int, b: Int): Boolean =
     if (a > b) true
