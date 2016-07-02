@@ -42,13 +42,8 @@ private val SQRT_DELTA = 0.00000001
 // Eucid's algorithm gcd greatest common divisor
 //-----------------------------------------------
 
-fun gcd(a: Int, b: Int): Int {
-    if (a == 0 || b == 0) throw IllegalArgumentException("Gcd can not be caluclated for 0")
-    return calcGcd(a, b)
-}
-
-tailrec fun calcGcd(a: Int, b: Int): Int =
-    if (b == 0) a else calcGcd(b, a % b)
+tailrec fun gcd(a: Int, b: Int): Int =
+    if (b == 0) a else gcd(b, a % b)
 
 // Factorial recursive and tail recursive
 

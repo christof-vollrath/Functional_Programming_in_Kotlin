@@ -41,9 +41,5 @@ class Functions_and_EvaluationTest_4_gcd {
     @Test fun gcd_3780_3528_should_be_252() {
         assertEquals(252, gcd(3780, 3528))
     }
-
-    @Test(expected = IllegalArgumentException::class) fun gcd_0_1_not_defined() {
-        gcd(0, 1)
-    }
 }
 
