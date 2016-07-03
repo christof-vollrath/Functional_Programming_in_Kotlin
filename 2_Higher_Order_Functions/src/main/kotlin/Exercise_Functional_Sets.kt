@@ -13,13 +13,15 @@ fun contains(functionalSet: FunctionalSet, i: Int): Boolean = functionalSet.chec
 
 // 2.1 Basic Functions on Sets
 
-fun singletonSet(i: Int): FunctionalSet = FunctionalSet({it == i})
+fun singletonSet(i: Int): FunctionalSet = FunctionalSet {it == i}
 
-fun union(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet({ contains(set1, it) || contains(set2, it) })
+fun union(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet { contains(set1, it) || contains(set2, it) }
 
-fun intersect(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet({ contains(set1, it) && contains(set2, it) })
+fun intersect(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet { contains(set1, it) && contains(set2, it) }
 
-fun diff(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet({ contains(set1, it) && ! contains(set2, it)})
+fun diff(set1: FunctionalSet, set2: FunctionalSet): FunctionalSet = FunctionalSet { contains(set1, it) && ! contains(set2, it)}
+
+fun filter(set: FunctionalSet, filterFunct: (Int) -> Boolean): FunctionalSet = FunctionalSet { contains(set, it) && filterFunct(it)  }
 
 // 2.2 Queries and Transformations on Sets
 

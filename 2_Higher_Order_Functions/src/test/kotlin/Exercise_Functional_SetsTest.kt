@@ -80,9 +80,10 @@ class Exercise_Function_SetsTest {
     @Test fun filter_should_contain_only_elements_fullfilling_condition() {
         val set = union(singletonSet(1), singletonSet(2))
         val filteredSet = filter(set, {it == 2})
-        assertTrue(contains(set, 2))
-        assertfalse(contains(set, 1))
+        assertTrue(contains(filteredSet, 2))
+        assertFalse(contains(filteredSet, 1))
     }
+
 
     // 2.2 Queries and Transformations on Sets
 
