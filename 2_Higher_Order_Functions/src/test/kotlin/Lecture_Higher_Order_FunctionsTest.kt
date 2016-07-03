@@ -4,8 +4,7 @@ import org.junit.Assert.*
 
 class Lecture_Higher_Order_FunctionsTest {
 
-// Higher Order Functions
-//------------------------
+    // 2.1 Higher Order Functions
 
     @Test fun sumInts_1_3_should_be_6() {
         assertEquals(6, sumInts(1,3))
@@ -119,5 +118,48 @@ class Lecture_Higher_Order_FunctionsTest {
     @Test fun mapReduceCurried_productFactorials_1_3_should_be_12() {
         assertEquals(12, mapReduceCurried(::fact, { a: Int, b: Int -> a * b}, 1)( 1, 3))
     }
+
+
+    // 2.3 Example: Finding Fixed Points
+
+    @Test fun fixedpoint_should_be_2() {
+        assertEquals(2.0, fixedPoint({ x -> 1 + x / 2.0 }, 1.0), DELTA)
+    }
+
+
+    @Test fun square_root_as_fixed_point() {
+        assertEquals(2.0, squareRootThroughFixedPoint(4.0), DELTA)
+    }
+
+    @Test fun square_root_as_fixed_point_of_average_damp() {
+        assertEquals(2.0, squareRootThroughFixedPointAndAverageDamp(4.0), DELTA)
+    }
+
+    val DELTA = 0.0001
+
+
+    // 2.5 Functions and Data
+
+    @Test fun add_rationals() {
+        assertEquals(Rational(7,6), Rational(1,2) + (Rational(2,3)))
+    }
+
+    @Test fun print_rationals() {
+        assertEquals("7/6", Rational(7,6).toString())
+    }
+
+    @Test fun negate_rationals() {
+        assertEquals(Rational(-7,6), -Rational(7,6))
+    }
+
+    @Test fun x_sub_y_sub_z() {
+        assertEquals(Rational(-79,42), Rational(1,3) - Rational(5,7) - Rational(3,2))
+    }
+
+    @Test fun rationals_should_be_simplified() {
+        assertEquals("1/2", Rational(5,10).toString())
+        assertEquals(Rational(3,2), Rational(6,4))
+    }
+
 
 }
