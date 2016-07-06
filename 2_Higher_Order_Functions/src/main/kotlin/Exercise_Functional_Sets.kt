@@ -4,6 +4,8 @@
 // Sets defined through functions
 
 // Kotlin 1.0 doesn't yet have type aliases, therefore a data class is needed to hold the type
+// In the future it could be something like:
+//   typealias FunctionalSet = (Int) -> Boolean
 
 data class FunctionalSet(val check: (Int) -> Boolean )
 
