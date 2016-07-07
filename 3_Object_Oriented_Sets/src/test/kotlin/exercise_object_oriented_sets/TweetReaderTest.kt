@@ -1,4 +1,7 @@
-import objsets.TweetData
+package exercise_object_oriented_sets
+
+import exercise_object_oriented_sets.TweetData
+import exercise_object_oriented_sets.TweetReader
 import org.junit.Assert.*
 import org.junit.Test
 

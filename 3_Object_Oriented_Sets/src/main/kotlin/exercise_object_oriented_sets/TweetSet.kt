@@ -1,3 +1,5 @@
+package exercise_object_oriented_sets
+
 import java.util.*
 
 /**
@@ -6,8 +8,8 @@ import java.util.*
 class Tweet(val user: String, val text: String, val retweets: Int)
 
 /**
- * This represents a set of objects of type `Tweet` in the form of a binary search
- * tree. Every branch in the tree has two children (two `TweetSet`s). There is an
+ * This represents a set of objects of type `exercise_object_oriented_sets.Tweet` in the form of a binary search
+ * tree. Every branch in the tree has two children (two `exercise_object_oriented_sets.TweetSet`s). There is an
  * invariant which always holds: for every branch `b`, all elements in the left
  * subtree are smaller than the tweet at `b`. The elements in the right subtree are
  * larger.
@@ -15,7 +17,7 @@ class Tweet(val user: String, val text: String, val retweets: Int)
  * Note that the above structure requires us to be able to compare two tweets (we
  * need to be able to say which of two tweets is larger, or if they are equal). In
  * this implementation, the equality / order of tweets is based on the tweet's text
- * (see `def incl`). Hence, a `TweetSet` could not contain two tweets with the same
+ * (see `def incl`). Hence, a `exercise_object_oriented_sets.TweetSet` could not contain two tweets with the same
  * text from different users.
  *
  *
@@ -43,7 +45,7 @@ abstract class TweetSet {
     abstract fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet
 
     /**
-     * Returns a new `TweetSet` that is the union of `TweetSet`s `this` and `that`.
+     * Returns a new `exercise_object_oriented_sets.TweetSet` that is the union of `exercise_object_oriented_sets.TweetSet`s `this` and `that`.
      *
      * Question: Should we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
@@ -66,7 +68,7 @@ abstract class TweetSet {
      * in descending order. In other words, the head of the resulting list should
      * have the highest retweet count.
      *
-     * Hint: the method `remove` on TweetSet will be very useful.
+     * Hint: the method `remove` on exercise_object_oriented_sets.TweetSet will be very useful.
      * Question: Should we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
      */
@@ -77,7 +79,7 @@ abstract class TweetSet {
      */
 
     /**
-     * Returns a new `TweetSet` which contains all elements of this set, and the
+     * Returns a new `exercise_object_oriented_sets.TweetSet` which contains all elements of this set, and the
      * the new element `tweet` in case it does not already exist in this set.
      *
      * If `this.contains(tweet)`, the current set is returned.
@@ -85,12 +87,12 @@ abstract class TweetSet {
     abstract fun incl(tweet: Tweet): TweetSet
 
     /**
-     * Returns a new `TweetSet` which excludes `tweet`.
+     * Returns a new `exercise_object_oriented_sets.TweetSet` which excludes `tweet`.
      */
     abstract fun remove(tweet: Tweet): TweetSet
 
     /**
-     * Tests if `tweet` exists in this `TweetSet`.
+     * Tests if `tweet` exists in this `exercise_object_oriented_sets.TweetSet`.
      */
     abstract fun contains(tweet: Tweet): Boolean
 
@@ -100,8 +102,8 @@ abstract class TweetSet {
     abstract fun foreach(f: (Tweet) -> Unit): Unit
 }
 
-class Empty: TweetSet() {
-    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty() // Todo
+object Empty: TweetSet() {
+    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty // Todo
 
     /**
      * The following methods are already implemented
@@ -109,7 +111,7 @@ class Empty: TweetSet() {
 
     override fun contains(tweet: Tweet): Boolean = false
 
-    override fun incl(tweet: Tweet): TweetSet = NonEmpty(tweet, Empty(), Empty())
+    override fun incl(tweet: Tweet): TweetSet = NonEmpty(tweet, Empty, Empty)
 
     override fun remove(tweet: Tweet): TweetSet = this
 
@@ -119,7 +121,7 @@ class Empty: TweetSet() {
 
 class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetSet() {
 
-    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty() // TODO
+    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty // TODO
 
     /**
      * The following methods are already implemented
@@ -175,8 +177,8 @@ object GoogleVsApple {
     val google = listOf("android", "Android", "galaxy", "Galaxy", "nexus", "Nexus")
     val apple = listOf("ios", "iOS", "iphone", "iPhone", "ipad", "iPad")
 
-    val googleTweets: TweetSet by lazy { Empty() } // TODO
-    val appleTweets: TweetSet by lazy { Empty() } // TODO
+    val googleTweets: TweetSet by lazy { Empty } // TODO
+    val appleTweets: TweetSet by lazy { Empty } // TODO
 
     /**
      * A list of all tweets mentioning a keyword from either apple or google,

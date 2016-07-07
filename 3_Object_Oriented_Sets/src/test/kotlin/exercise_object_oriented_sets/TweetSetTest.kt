@@ -1,6 +1,7 @@
+package exercise_object_oriented_sets
+
 import org.junit.Test
 import java.util.*
-import java.util.Set
 
 class TweetSetTest {
     val set1 = Empty()

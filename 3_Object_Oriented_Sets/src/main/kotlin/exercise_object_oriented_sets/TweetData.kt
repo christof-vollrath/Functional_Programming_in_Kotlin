@@ -1,4 +1,4 @@
-package objsets
+package exercise_object_oriented_sets
 
 // real tweet data, collected on Oct 1
 object TweetData {
@@ -178,7 +178,7 @@ object TweetData {
 { "user": "TechCrunch", "text": "Sprint And Motorola Party Like It's 2010: Motorola XPRT Finally Gets A Taste Of Gingerbread http://t.co/vOJRwng8 by @romaindillet", "retweets": 7.0 },
 { "user": "TechCrunch", "text": "U.S. Appeals Court: Samsung Free To Seek Lifting Of Galaxy Tab 10.1 Sales Injunction http://t.co/HTvIDlQU by @drizzled", "retweets": 24.0 },
 { "user": "TechCrunch", "text": "Google Launches A New Tablet-Optimized User Interface For Flight Search http://t.co/xQOdAA60 by @fredericl", "retweets": 36.0 },
-{ "user": "TechCrunch", "text": "Twitter Announces New Improvements For Discover Tab, Adds Continuous Tweet Stream http://t.co/DpMRuDvO by @thatdrew", "retweets": 69.0 },
+{ "user": "TechCrunch", "text": "Twitter Announces New Improvements For Discover Tab, Adds Continuous exercise_object_oriented_sets.Tweet Stream http://t.co/DpMRuDvO by @thatdrew", "retweets": 69.0 },
 { "user": "TechCrunch", "text": "Apple Is Heavily Promoting Alternative Map Apps On The App Store http://t.co/LNf6lKQH by @thatdrew", "retweets": 77.0 },
 { "user": "TechCrunch", "text": "PadPivot NST Review: The Best Available iPad Stand Just Got Better http://t.co/YJWkwkDd by @drizzled", "retweets": 11.0 },
 { "user": "TechCrunch", "text": "AngelList Wings Is A Handy App For Searching AngelList On Your iPhone http://t.co/tJwqOMdi by @sarahintampa", "retweets": 7.0 },
