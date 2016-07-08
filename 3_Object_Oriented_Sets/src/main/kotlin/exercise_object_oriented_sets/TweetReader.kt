@@ -2,26 +2,25 @@ package exercise_object_oriented_sets
 
 import com.google.gson.Gson
 import com.github.salomonbrys.kotson.*
-import head
-import tail
 
 object TweetReader {
     fun getTweetData(json: String): List<Tweet> =
             Gson().fromJson<List<Tweet>>(json)
 
-    private fun unionOfAllTweetSets(curSets: List<TweetSet>, acc: TweetSet): TweetSet =
-        if (curSets.isEmpty()) acc
-        else unionOfAllTweetSets(curSets.tail(), acc.union(curSets.head()))
-
-    private fun toTweetSet(l: List<Tweet>): TweetSet =
-        l.fold(Empty) { result: TweetSet, tweet: Tweet -> result.incl(tweet) }
-
-    private val tweetSets = listOf(
-//            toTweetSet(getTweetData(TweetData.gizmodo)),
-//            toTweetSet(getTweetData(TweetData.TechCrunch)),
-            toTweetSet(getTweetData(TweetData.engadget)),
-            toTweetSet(getTweetData(TweetData.amazondeals))
+    val tweetLists = listOf(
+            getTweetData(TweetData.gizmodo),
+            getTweetData(TweetData.TechCrunch),
+            getTweetData(TweetData.engadget),
+            getTweetData(TweetData.amazondeals)
     )
-    val allTweets: TweetSet = unionOfAllTweetSets(tweetSets, Empty)
+    val allTweetsList = tweetLists.fold(listOf<Tweet>()) {
+                list1, list2 ->
+                list1 + list2
+            }
 
+    fun toTweetSet(l: List<Tweet>): TweetSet =
+            l.fold(Empty) { result: TweetSet, tweet: Tweet -> result.incl(tweet) }
+
+    val allTweets: TweetSet = toTweetSet(allTweetsList)
 }
+

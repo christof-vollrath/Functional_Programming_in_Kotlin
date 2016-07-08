@@ -1,8 +1,7 @@
 package exercise_object_oriented_sets
 
-import exercise_object_oriented_sets.TweetData
-import exercise_object_oriented_sets.TweetReader
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TweetReaderTest {
@@ -17,8 +16,8 @@ class TweetReaderTest {
 
     @Test fun allTweets_should_have_right_size() {
         var size = 0
-        TweetReader.allTweets.foreach {  println(it); size++}
+        TweetReader.allTweets.foreach { size++ }
         println(size)
-        assertEquals(300, size)
+        assertEquals(400, size)
     }
 }

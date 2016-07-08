@@ -1,8 +1,7 @@
 package exercise_object_oriented_sets
 
-import org.junit.Test
-import java.util.*
 import org.junit.Assert.*
+import org.junit.Test
 
 class TweetSetTest {
     val set1 = Empty
@@ -13,14 +12,6 @@ class TweetSetTest {
     val set4c = set3.incl(c)
     val set4d = set3.incl(d)
     val set5 = set4c.incl(d)
-
-    fun asSet(tweets: TweetSet): Set<Tweet> {
-        var res = mutableSetOf<Tweet>()
-        tweets.foreach({res.add(it)})
-        return res
-    }
-
-    fun size(set: TweetSet): Int = asSet(set).size
 
     @Test fun filter_on_empty_set() {
         assertEquals(0, size(set1.filter({tw: Tweet -> tw.user == "a"})))
@@ -53,3 +44,12 @@ class TweetSetTest {
     }
 
 }
+
+fun asSet(tweets: TweetSet): Set<Tweet> {
+    val res = mutableSetOf<Tweet>()
+    tweets.foreach({res.add(it)})
+    return res
+}
+
+fun size(set: TweetSet): Int = asSet(set).size
+

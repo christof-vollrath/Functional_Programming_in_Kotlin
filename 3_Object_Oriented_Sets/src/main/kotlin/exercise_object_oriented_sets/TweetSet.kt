@@ -37,7 +37,8 @@ abstract class TweetSet {
      * Question: Can we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
      */
-    fun filter(p: (Tweet) -> Boolean): TweetSet = this // TODO
+    fun filter(p: (Tweet) -> Boolean) = filterAcc(p, Empty)
+
 
     /**
      * This is a helper method for `filter` that propagetes the accumulated tweets.
@@ -61,7 +62,7 @@ abstract class TweetSet {
      * Question: Should we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
      */
-    fun mostRetweeted(): Tweet = Tweet("todo", "todo", 1) // TODO
+    abstract fun mostRetweeted(): Tweet
 
     /**
      * Returns a list containing all tweets of this set, sorted by retweet count
@@ -72,7 +73,13 @@ abstract class TweetSet {
      * Question: Should we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
      */
-    fun descendingByRetweet(): TweetList = Nil // TODO
+
+    fun descendingByRetweet(): TweetList {
+        val mostRetweetedTweet = mostRetweeted()
+        val remainingTweets = remove(mostRetweetedTweet)
+        if (remainingTweets == Empty) return Cons(mostRetweetedTweet, Nil)
+        else return Cons(mostRetweetedTweet, remainingTweets.descendingByRetweet())
+    }
 
     /**
      * The following methods are already implemented
@@ -116,7 +123,12 @@ abstract class TweetSet {
 }
 
 object Empty: TweetSet() {
-    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty // Todo
+
+    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = acc
+
+    override fun union(that: TweetSet): TweetSet = that
+
+    override fun mostRetweeted(): Tweet { throw NoSuchElementException() }
 
     /**
      * The following methods are already implemented
@@ -129,32 +141,53 @@ object Empty: TweetSet() {
     override fun remove(tweet: Tweet): TweetSet = this
 
     override fun foreach(f: (Tweet) -> Unit): Unit {}
-
-    override fun union(that: TweetSet): TweetSet = that
 }
 
 
 class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetSet() {
 
-    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet = Empty // TODO
+    override fun filterAcc(p: (Tweet) -> Boolean, acc: TweetSet): TweetSet =
+        left.filterAcc(p,
+            right.filterAcc(p,
+                if (p(elem)) acc.incl(elem)
+                else acc))
+
+    override fun union(that: TweetSet): TweetSet =
+            left.union(right).union(that).incl(elem)
+
+    override fun mostRetweeted(): Tweet  {
+        var result = elem
+        if (left != Empty) {
+            val leftRetweets = left.mostRetweeted()
+            if (leftRetweets.retweets > result.retweets)
+                result = leftRetweets
+        }
+        if (right != Empty) {
+            val rightRetweets = right.mostRetweeted()
+            if (rightRetweets.retweets > result.retweets)
+                result = rightRetweets
+        }
+        return result
+    }
+
 
     /**
      * The following methods are already implemented
      */
 
-    override fun contains(x: Tweet): Boolean =
-        if (x.text < elem.text) left.contains(x)
-        else if (elem.text < x.text) right.contains(x)
+    override fun contains(tweet: Tweet): Boolean =
+        if (tweet.text < elem.text) left.contains(tweet)
+        else if (elem.text < tweet.text) right.contains(tweet)
              else true
 
-    override fun incl(x: Tweet): TweetSet =
-        if (x.text < elem.text) NonEmpty(elem, left.incl(x), right)
-        else if (elem.text < x.text) NonEmpty(elem, left, right.incl(x))
+    override fun incl(tweet: Tweet): TweetSet =
+        if (tweet.text < elem.text) NonEmpty(elem, left.incl(tweet), right)
+        else if (elem.text < tweet.text) NonEmpty(elem, left, right.incl(tweet))
              else this
 
-    override fun remove(tw: Tweet): TweetSet =
-        if (tw.text < elem.text) NonEmpty(elem, left.remove(tw), right)
-        else if (elem.text < tw.text) NonEmpty(elem, left, right.remove(tw))
+    override fun remove(tweet: Tweet): TweetSet =
+        if (tweet.text < elem.text) NonEmpty(elem, left.remove(tweet), right)
+        else if (elem.text < tweet.text) NonEmpty(elem, left, right.remove(tweet))
              else left.union(right)
 
     override fun foreach(f: (Tweet) -> Unit): Unit {
@@ -162,9 +195,6 @@ class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetS
         left.foreach(f)
         right.foreach(f)
     }
-    override fun union(that: TweetSet): TweetSet =
-        that.union(left).union(right).incl(elem)
-
 }
 
 
@@ -181,8 +211,10 @@ interface TweetList {
 }
 
 val Nil = object: TweetList {
-    override val head = throw NoSuchElementException("head of EmptyList")
-    override val tail = throw NoSuchElementException("tail of EmptyList")
+    override val head: Tweet
+    get() { throw NoSuchElementException("head of EmptyList") }
+    override val tail: TweetList
+    get() { throw NoSuchElementException("tail of EmptyList") }
     override val isEmpty = true
 }
 

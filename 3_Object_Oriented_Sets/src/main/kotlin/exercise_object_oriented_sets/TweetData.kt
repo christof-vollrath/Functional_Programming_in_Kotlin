@@ -2,7 +2,10 @@ package exercise_object_oriented_sets
 
 // real tweet data, collected on Oct 1
 object TweetData {
+/*
     val gizmodo = """[
+*/
+val gizmodo = """[
 { "user": "gizmodo", "text": "Kindle Paperwhite Review: Forget Everything Else, This Is the E-Reader You Want http://t.co/737W6aNC", "retweets": 51.0 },
 { "user": "gizmodo", "text": "These new Apple patents give a sneak peek at what future iPhone cameras might have in store. http://t.co/0YT9rjxp", "retweets": 49.0 },
 { "user": "gizmodo", "text": "Ever wonder why the sky is dark at night? Here's your answer. http://t.co/eTKxkcaE", "retweets": 86.0 },
