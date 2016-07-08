@@ -74,12 +74,7 @@ abstract class TweetSet {
      * and be implemented in the subclasses?
      */
 
-    fun descendingByRetweet(): TweetList {
-        val mostRetweetedTweet = mostRetweeted()
-        val remainingTweets = remove(mostRetweetedTweet)
-        if (remainingTweets == Empty) return Cons(mostRetweetedTweet, Nil)
-        else return Cons(mostRetweetedTweet, remainingTweets.descendingByRetweet())
-    }
+    abstract fun descendingByRetweet(): TweetList
 
     /**
      * The following methods are already implemented
@@ -130,6 +125,8 @@ object Empty: TweetSet() {
 
     override fun mostRetweeted(): Tweet { throw NoSuchElementException() }
 
+    override fun descendingByRetweet(): TweetList = Nil
+
     /**
      * The following methods are already implemented
      */
@@ -157,19 +154,17 @@ class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetS
 
     override fun mostRetweeted(): Tweet  {
         var result = elem
-        if (left != Empty) {
-            val leftRetweets = left.mostRetweeted()
-            if (leftRetweets.retweets > result.retweets)
-                result = leftRetweets
-        }
-        if (right != Empty) {
-            val rightRetweets = right.mostRetweeted()
-            if (rightRetweets.retweets > result.retweets)
-                result = rightRetweets
+        foreach {
+            if (it.retweets > result.retweets) result = it
         }
         return result
     }
 
+    override fun descendingByRetweet(): TweetList {
+        val mostRetweetedTweet = mostRetweeted()
+        val remainingTweets = remove(mostRetweetedTweet)
+        return Cons(mostRetweetedTweet, remainingTweets.descendingByRetweet())
+    }
 
     /**
      * The following methods are already implemented

@@ -76,8 +76,8 @@ class MoreTweetSetTest {
         assertEquals(9, set.mostRetweeted().retweets)
     }
     // descendingByRetweet
-    @Test(expected=NoSuchElementException::class) fun descendingRetweet_for_empty_set_should_throw_exception() {
-        Empty.descendingByRetweet()
+    @Test fun descendingRetweet_for_empty_set_should_return_Nil() {
+        assertEquals(Nil, Empty.descendingByRetweet())
     }
     @Test fun descendingRetweet_for_one_element_should_return_list_with_this() {
         val set = Empty.incl(Tweet("a", "Text a1", 1))
