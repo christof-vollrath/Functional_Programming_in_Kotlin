@@ -14,4 +14,11 @@ class TweetReaderTest {
         assertTrue(tweetData[0].text.startsWith("Kindle"))
         assertEquals(51, tweetData[0].retweets)
     }
+
+    @Test fun allTweets_should_have_right_size() {
+        var size = 0
+        TweetReader.allTweets.foreach {  println(it); size++}
+        println(size)
+        assertEquals(300, size)
+    }
 }

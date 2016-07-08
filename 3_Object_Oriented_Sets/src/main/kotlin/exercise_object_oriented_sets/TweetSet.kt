@@ -5,7 +5,7 @@ import java.util.*
 /**
  * A class to represent tweets.
  */
-class Tweet(val user: String, val text: String, val retweets: Int)
+data class Tweet(val user: String, val text: String, val retweets: Int)
 
 /**
  * This represents a set of objects of type `exercise_object_oriented_sets.Tweet` in the form of a binary search
@@ -50,7 +50,7 @@ abstract class TweetSet {
      * Question: Should we implment this method here, or should it remain abstract
      * and be implemented in the subclasses?
      */
-    fun union(that: TweetSet): TweetSet = this // TODO
+    abstract fun union(that: TweetSet): TweetSet
 
     /**
      * Returns the tweet from this set which has the greatest retweet count.
@@ -100,6 +100,19 @@ abstract class TweetSet {
      * This method takes a function and applies it to every element in the set.
      */
     abstract fun foreach(f: (Tweet) -> Unit): Unit
+
+    override fun toString(): String {
+        val result = StringBuilder()
+        result.append("[")
+        var prefix = ""
+        foreach {
+            result.append(prefix)
+            prefix = ","
+            result.append(it)
+        }
+        result.append("]")
+        return result.toString()
+    }
 }
 
 object Empty: TweetSet() {
@@ -116,6 +129,8 @@ object Empty: TweetSet() {
     override fun remove(tweet: Tweet): TweetSet = this
 
     override fun foreach(f: (Tweet) -> Unit): Unit {}
+
+    override fun union(that: TweetSet): TweetSet = that
 }
 
 
@@ -147,6 +162,9 @@ class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetS
         left.foreach(f)
         right.foreach(f)
     }
+    override fun union(that: TweetSet): TweetSet =
+        that.union(left).union(right).incl(elem)
+
 }
 
 
