@@ -90,4 +90,13 @@ class MoreTweetSetTest {
         assertEquals(1, set.descendingByRetweet().tail.head.retweets)
         assertTrue(set.descendingByRetweet().tail.tail.isEmpty)
     }
+    // containsAny
+    @Test fun containsAny_not_in_string() {
+        val keywords = listOf("Alles", "Butter")
+        assertFalse(containsAny("Anything else", keywords))
+    }
+    @Test fun containsAny_in_string() {
+        val keywords = listOf("Alles", "else", "Butter")
+        assertTrue(containsAny("Anything else", keywords))
+    }
 }
