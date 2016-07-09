@@ -44,4 +44,52 @@ class IntSetTest {
         assertTrue(unionSet.contains(3))
         assertTrue(unionSet.contains(4))
     }
+
+    // 3.3 Parameterized Types
+
+    // ConsList
+
+    @Test fun empty_ConsList_should_be_empty() {
+        assertTrue(Nil<Int>().empty)
+    }
+
+    @Test fun a_ConsList_with_one_element_should_contain_it_as_head() {
+        assertEquals(1, Cons(1, Nil()).head)
+        assertTrue(Cons(1, Nil()).tail.empty)
+    }
+
+    @Test fun singleton_should_create_a_list_with_one_element() {
+        assertEquals(1, singleton(1).head)
+        assertTrue(singleton(1).tail.empty)
+    }
+
+    @Test(expected=IndexOutOfBoundsException::class) fun nth_0_for_empty_list_should_throw_exception() {
+        nth(0, Nil<Int>())
+    }
+    @Test fun nth_0_for_list_with_one_element_should_return_element() {
+        assertEquals(1, nth(0, singleton(1)))
+    }
+    @Test fun nth_2_should_return_element() {
+        assertEquals(3, nth(2, Cons(1, Cons(2, singleton(3)))))
+    }
+    @Test(expected=IndexOutOfBoundsException::class) fun nth_3_with_too_small_list_should_throw_exception() {
+        nth(3, Cons(1, Cons(2, singleton(3))))
+    }
+
+    // Type erasure
+
+    // While Java and Scala have type erasure,
+    // in Kotlin the combination of inline and reified allows access to runtime types
+
+    @Test fun typeOfParam_for_String() {
+        assertEquals("kotlin.String", typeOfParam("a simple string"))
+    }
+    @Test fun typeOfParam_for_Int() {
+        assertEquals("kotlin.Int", typeOfParam(1))
+    }
+    @Test fun typeOfParam_for_ConsList() {
+        assertEquals("Cons", typeOfParam(singleton(1)))
+    }
+
+
 }
