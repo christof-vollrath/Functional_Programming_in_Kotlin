@@ -45,11 +45,3 @@ class TweetSetTest {
 
 }
 
-fun asSet(tweets: TweetSet): Set<Tweet> {
-    val res = mutableSetOf<Tweet>()
-    tweets.foreach({res.add(it)})
-    return res
-}
-
-fun size(set: TweetSet): Int = asSet(set).size
-

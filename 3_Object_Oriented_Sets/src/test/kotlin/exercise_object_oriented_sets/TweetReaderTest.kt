@@ -18,6 +18,6 @@ class TweetReaderTest {
         var size = 0
         TweetReader.allTweets.foreach { size++ }
         println(size)
-        assertEquals(400, size)
+        assertEquals(695, size)
     }
 }

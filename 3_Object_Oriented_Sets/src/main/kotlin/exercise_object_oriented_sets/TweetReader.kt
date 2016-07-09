@@ -11,7 +11,10 @@ object TweetReader {
             getTweetData(TweetData.gizmodo),
             getTweetData(TweetData.TechCrunch),
             getTweetData(TweetData.engadget),
-            getTweetData(TweetData.amazondeals)
+            getTweetData(TweetData.amazondeals),
+            getTweetData(TweetData.CNET),
+            getTweetData(TweetData.gadgetlab),
+            getTweetData(TweetData.mashable)
     )
     val allTweetsList = tweetLists.fold(listOf<Tweet>()) {
                 list1, list2 ->
