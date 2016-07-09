@@ -150,7 +150,9 @@ class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet): TweetS
                 else acc))
 
     override fun union(that: TweetSet): TweetSet =
-            left.union(right).union(that).incl(elem)
+        left.union(right.union(that)).incl(elem)
+        // Strangely this has a much better performance than left.union(right).union(that).incl(elem)
+        // See discussion in https://www.coursera.org/learn/progfun1/discussions/weeks/3/threads/AzJ-4CLYEeag6wpD-92Rcw
 
     override fun mostRetweeted(): Tweet  {
         var result = elem
@@ -252,3 +254,12 @@ class Test {}
 fun main(args : Array<String>) {
     GoogleVsApple.trending.foreach { println(it) }
 }
+
+
+fun asSet(tweets: TweetSet): Set<Tweet> {
+    val res = mutableSetOf<Tweet>()
+    tweets.foreach({res.add(it)})
+    return res
+}
+
+fun size(set: TweetSet): Int = asSet(set).size
