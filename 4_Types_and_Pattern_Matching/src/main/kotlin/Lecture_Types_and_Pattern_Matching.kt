@@ -19,6 +19,7 @@ object pureTrue: PureBoolean() {
 }
 
 // Nat (simple variant of pure integers)
+// Peano numbers
 
 abstract class Nat {
     abstract fun isZero(): Boolean
