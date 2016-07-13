@@ -21,7 +21,19 @@ object Huffman {
      */
     abstract class CodeTree {}
     class Fork(left: CodeTree, right: CodeTree, chars: List<Char>, weight: Int): CodeTree()
-    class Leaf(char: Char, weight: Int): CodeTree()
+    class Leaf(val char: Char, val weight: Int): CodeTree() {
+        override fun equals(other: Any?): Boolean { // Unfortunately equals must be implemented since data classes have no intheritance in Kotlin 1.0
+            if (this === other) return true
+            if (other?.javaClass != javaClass) return false
+
+            other as Leaf
+
+            if (char != other.char) return false
+            if (weight != other.weight) return false
+
+            return true
+        }
+    }
 
 
     // Part 1: Basics
@@ -86,7 +98,24 @@ object Huffman {
      * head of the list should have the smallest weight), where the weight
      * of a leaf is the frequency of the character.
      */
-    fun makeOrderedLeafList(freqs: List<Pair<Char, Int>>): List<Leaf> = TODO()
+    fun makeOrderedLeafList(freqs: List<Pair<Char, Int>>): List<Leaf> =
+        if (freqs.isEmpty()) listOf<Leaf>()
+        else {
+            val max = highestLeaf(freqs)
+            listOf(max) + makeOrderedLeafList(freqs.tail())
+        }
+    internal fun highestLeaf(freqs: List<Pair<Char, Int>>): Leaf {
+        val head = freqs.head()
+        val headLeaf = Leaf(head.first, head.second)
+        val tail = freqs.tail()
+        if (tail.isEmpty()) return headLeaf
+        else {
+            val maxTail = highestLeaf(tail)
+            if (head.second < maxTail.weight) return maxTail
+            else return headLeaf
+        }
+    }
+
 
     /**
      * Checks whether the list `trees` contains only one single code tree.
