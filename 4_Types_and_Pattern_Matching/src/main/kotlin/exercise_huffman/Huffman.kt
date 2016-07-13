@@ -1,5 +1,8 @@
 package exercise_huffman
 
+import head
+import tail
+
 /**
  * Assignment 4: Huffman coding
  *
@@ -67,9 +70,16 @@ object Huffman {
      *       println("integer is  : "+ theInt)
      *   }
      */
-    fun times(chars: List<Char>): List<Pair<Char, Int>> = TODO()
+    fun times(chars: List<Char>): List<Pair<Char, Int>> =
+        if (chars.isEmpty()) listOf()
+        else mergeTimes(chars.head(), times(chars.tail()))
 
-    /**
+    internal fun mergeTimes(c: Char, pairs: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
+        if (pairs.isEmpty()) listOf(Pair(c, 1))
+        else if (c == pairs.head().first) listOf(Pair(c, pairs.head().second + 1)) + pairs.tail()
+                else listOf(pairs.head()) + mergeTimes(c, pairs.tail())
+
+                /**
      * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
      *
      * The returned list should be ordered by ascending weights (i.e. the
