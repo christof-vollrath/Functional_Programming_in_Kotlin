@@ -33,6 +33,11 @@ object Huffman {
 
             return true
         }
+
+        override fun toString(): String{
+            return "Leaf(char=$char, weight=$weight)"
+        }
+
     }
 
 
@@ -102,7 +107,7 @@ object Huffman {
         if (freqs.isEmpty()) listOf<Leaf>()
         else {
             val max = highestLeaf(freqs)
-            listOf(max) + makeOrderedLeafList(freqs.tail())
+            listOf(max) + makeOrderedLeafList(removeTimes(max.char, freqs))
         }
     internal fun highestLeaf(freqs: List<Pair<Char, Int>>): Leaf {
         val head = freqs.head()
@@ -111,16 +116,23 @@ object Huffman {
         if (tail.isEmpty()) return headLeaf
         else {
             val maxTail = highestLeaf(tail)
-            if (head.second < maxTail.weight) return maxTail
+            if (headLeaf.weight < maxTail.weight) return maxTail
             else return headLeaf
         }
     }
+    internal fun removeTimes(c: Char, pairs: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
+        if (pairs.isEmpty()) pairs
+        else {
+            val head = pairs.head()
+            if (head.first == c) pairs.tail() // Only once in list
+            else listOf(head) + removeTimes(c, pairs.tail())
+        }
 
 
     /**
      * Checks whether the list `trees` contains only one single code tree.
      */
-    fun singleton(trees: List<CodeTree>): Boolean = TODO()
+    fun singleton(trees: List<CodeTree>): Boolean = trees.size == 1
 
     /**
      * The parameter `trees` of this function is a list of code trees ordered
@@ -153,7 +165,10 @@ object Huffman {
      *    the example invocation. Also define the return type of the `until` function.
      *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
      */
-    // TODO fun until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+    fun until(test: (List<CodeTree>) -> Boolean, funct: (List<CodeTree>) -> List<CodeTree>, input: List<CodeTree>): List<CodeTree> = // No Currying in Kotlin
+        if (test(input)) input
+        else until(test, funct, funct(input))
+
 
     /**
      * This function creates a code tree which is optimal to encode the text `chars`.
