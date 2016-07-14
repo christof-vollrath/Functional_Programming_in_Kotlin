@@ -20,9 +20,26 @@ object Huffman {
      * leaves.
      */
     abstract class CodeTree {}
-    class Fork(left: CodeTree, right: CodeTree, chars: List<Char>, weight: Int): CodeTree()
-    class Leaf(val char: Char, val weight: Int): CodeTree() {
+    class Fork(val left: CodeTree, val right: CodeTree, val chars: List<Char>, val weight: Int): CodeTree() {
         override fun equals(other: Any?): Boolean { // Unfortunately equals must be implemented since data classes have no intheritance in Kotlin 1.0
+            if (this === other) return true
+            if (other?.javaClass != javaClass) return false
+
+            other as Fork
+
+            if (left != other.left) return false
+            if (right != other.right) return false
+            if (chars != other.chars) return false
+            if (weight != other.weight) return false
+
+            return true
+        }
+        override fun toString(): String{
+            return "Fork(left=$left, right=$right, chars=$chars, weight=$weight)"
+        }
+    }
+    class Leaf(val char: Char, val weight: Int): CodeTree() { // Unfortunately equals must be implemented too
+        override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other?.javaClass != javaClass) return false
 
@@ -33,7 +50,6 @@ object Huffman {
 
             return true
         }
-
         override fun toString(): String{
             return "Leaf(char=$char, weight=$weight)"
         }
@@ -42,9 +58,20 @@ object Huffman {
 
 
     // Part 1: Basics
-    fun weight(tree: CodeTree): Int = TODO() // tree match ...
+    fun weight(tree: CodeTree): Int =  // tree match ...
+        when(tree) {
+            is Fork -> tree.weight
+            is Leaf -> tree.weight
+            else -> throw IllegalArgumentException("Unkown CodeTree subtype: ${tree.javaClass}")
+        }
 
-    fun chars(tree: CodeTree): List<Char> = TODO() // tree match ...
+
+    fun chars(tree: CodeTree): List<Char> =  // tree match ...
+            when(tree) {
+                is Fork -> tree.chars
+                is Leaf -> listOf(tree.char)
+                else -> throw IllegalArgumentException("Unkown CodeTree subtype: ${tree.javaClass}")
+            }
 
     fun makeCodeTree(left: CodeTree, right: CodeTree) =
     Fork(left, right, chars(left) + chars(right), weight(left) + weight(right))
@@ -146,7 +173,28 @@ object Huffman {
      * If `trees` is a list of less than two elements, that list should be returned
      * unchanged.
      */
-    fun combine(trees: List<CodeTree>): List<CodeTree> = TODO()
+    fun combine(trees: List<CodeTree>): List<CodeTree> =
+        if (trees.isEmpty()) trees
+        else {
+            val firstTree = trees.head()
+            val tailTree = trees.tail()
+            if (tailTree.isEmpty()) listOf(firstTree)
+            else insertOrdered(combineTwo(firstTree, tailTree.first()), tailTree.tail())
+        }
+    internal fun combineTwo(first: CodeTree, second: CodeTree): CodeTree {
+        val leftIsFirst = weight(first) < weight(second)
+        val left = if (leftIsFirst) first else second
+        val right = if (!leftIsFirst) first else second
+        return Fork(left, right, chars(left) + chars(right), weight(left) + weight(right) )
+    }
+    internal fun insertOrdered(tree: CodeTree, list: List<CodeTree>): List<CodeTree> =
+        if (list.isEmpty()) listOf(tree)
+        else {
+            val head = list.head()
+            if (weight(tree) < weight(head)) listOf(tree) + list
+            else listOf(head) + insertOrdered(tree, list.tail())
+        }
+
 
     /**
      * This function will be called in the following way:
@@ -165,9 +213,12 @@ object Huffman {
      *    the example invocation. Also define the return type of the `until` function.
      *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
      */
-    fun until(test: (List<CodeTree>) -> Boolean, funct: (List<CodeTree>) -> List<CodeTree>, input: List<CodeTree>): List<CodeTree> = // No Currying in Kotlin
-        if (test(input)) input
-        else until(test, funct, funct(input))
+    fun until(test: (List<CodeTree>) -> Boolean, funct: (List<CodeTree>) -> List<CodeTree>): (List<CodeTree>) -> List<CodeTree> = {
+        input: List<CodeTree> -> repeatUntil(test, funct, input)
+    }
+    internal fun repeatUntil(test: (List<CodeTree>) -> Boolean, funct: (List<CodeTree>) -> List<CodeTree>, input: List<CodeTree>): List<CodeTree> = // No Currying in Kotlin
+            if (test(input)) input
+            else repeatUntil(test, funct, funct(input))
 
 
     /**
@@ -248,4 +299,5 @@ object Huffman {
      * and then uses it to perform the actual encoding.
      */
     fun quickEncode(tree: CodeTree, text: List<Char>): List<Integer> = TODO()
+
 }
