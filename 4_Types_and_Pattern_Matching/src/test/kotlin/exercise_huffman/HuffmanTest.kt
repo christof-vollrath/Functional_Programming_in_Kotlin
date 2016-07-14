@@ -121,14 +121,51 @@ class HuffManTest {
     }
     @Test fun combine_until_singleton_2() {
         assertEquals(
-                listOf(
+            listOf(
+                Huffman.Fork(
+                    Huffman.Fork(Huffman.Leaf('a', 2), Huffman.Leaf('b', 3), listOf('a','b'), 5),
+                    Huffman.Leaf('c', 6),
+                    listOf('a', 'b', 'c'), 11)),
+            Huffman.until({ Huffman.singleton(it) }, { Huffman.combine(it) })(
+                listOf(Huffman.Leaf('b', 3), Huffman.Leaf('a', 2), Huffman.Leaf('c', 6))
+            )
+        )
+    }
+    @Test fun combine_until_example_from_exercise() {
+        assertEquals(
+            listOf(
+                Huffman.Fork(
+                    Huffman.Leaf('A', 8),
+                    Huffman.Fork(
                         Huffman.Fork(
-                                Huffman.Fork(Huffman.Leaf('a', 2), Huffman.Leaf('b', 3), listOf('a','b'), 5),
-                                Huffman.Leaf('c', 6),
-                                listOf('a', 'b', 'c'), 11)),
-                Huffman.until({ Huffman.singleton(it) }, { Huffman.combine(it) })(
-                        listOf(Huffman.Leaf('b', 3), Huffman.Leaf('a', 2), Huffman.Leaf('c', 6))
+                                Huffman.Leaf('B', 3),
+                                Huffman.Fork(
+                                    Huffman.Leaf('C', 1), Huffman.Leaf('D', 1), listOf('C', 'D'), 2
+                                ),
+                                listOf('B', 'C', 'D'), 5
+                        ),
+                        Huffman.Fork(
+                            Huffman.Fork(
+                                Huffman.Leaf('E', 1), Huffman.Leaf('F', 1), listOf('E', 'F'), 2
+                            ),
+                            Huffman.Fork(
+                                Huffman.Leaf('G', 1), Huffman.Leaf('H', 1), listOf('G', 'H'), 2
+                            ),
+                                listOf('E', 'F', 'G', 'H'), 4
+                        ),
+                        listOf('B', 'C', 'D', 'E', 'F', 'G', 'H'), 9
+                    ),
+                    listOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), 17
                 )
+            ),
+            Huffman.until({ Huffman.singleton(it) }, { Huffman.combine(it) })(
+                listOf(Huffman.Leaf('B', 3), Huffman.Leaf('A', 8),
+                       Huffman.Leaf('F', 1), Huffman.Leaf('G', 1), Huffman.Leaf('H', 1),
+                       Huffman.Leaf('C', 1), Huffman.Leaf('D', 1), Huffman.Leaf('E', 1)
+
+                )
+        )
+
         )
     }
 }
