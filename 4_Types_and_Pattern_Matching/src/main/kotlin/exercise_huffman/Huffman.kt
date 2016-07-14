@@ -21,7 +21,7 @@ object Huffman {
      */
     abstract class CodeTree {}
     class Fork(val left: CodeTree, val right: CodeTree, val chars: List<Char>, val weight: Int): CodeTree() {
-        override fun equals(other: Any?): Boolean { // Unfortunately equals must be implemented since data classes have no intheritance in Kotlin 1.0
+        override fun equals(other: Any?): Boolean { // Unfortunately equals must be implemented since data classes have no inheritance in Kotlin 1.0
             if (this === other) return true
             if (other?.javaClass != javaClass) return false
 
