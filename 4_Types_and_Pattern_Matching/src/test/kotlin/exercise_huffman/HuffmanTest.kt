@@ -176,10 +176,10 @@ class HuffManTest {
     @Test fun decode_two_chars_AB() {
         assertEquals(listOf('A', 'B'), Huffman.decode(
             Huffman.Fork(
-                Huffman.Leaf('A', 1), Huffman.Leaf('B', 2),
+                Huffman.Leaf('B', 2), Huffman.Leaf('A', 1),
                 listOf('A', 'B'), 3
             ),
-            listOf(0,1)
+            listOf(1,0)
         ))
     }
     @Test fun decode_two_chars_BA() {
@@ -206,4 +206,34 @@ class HuffManTest {
         assertEquals(listOf('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l'),
             Huffman.decodedSecret())
     }
+
+    // encode
+    @Test fun encode_single_char() {
+        assertEquals(listOf<Integer>(), Huffman.encode(
+            Huffman.Leaf('A', 1), listOf<Char>('A')
+        ))
+    }
+    @Test fun encode_two_chars_AB() {
+        assertEquals(listOf(1,0), Huffman.encode(
+            Huffman.Fork(
+                Huffman.Leaf('B', 2), Huffman.Leaf('A', 1),
+                listOf('A', 'B'), 3
+            ),
+            listOf('A', 'B')
+        ))
+    }
+    @Test fun encode_two_chars_BA() {
+        assertEquals(listOf(0,1), Huffman.encode(
+            Huffman.Fork(
+                Huffman.Leaf('B', 2), Huffman.Leaf('A', 1),
+                listOf('A', 'B'), 3
+            ),
+            listOf('B', 'A')
+        ))
+    }
+    @Test fun encode_secret() {
+        assertEquals(Huffman.secret,
+            Huffman.encode(Huffman.frenchCode, listOf('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l')))
+    }
+
 }
