@@ -159,7 +159,7 @@ object Huffman {
     /**
      * Checks whether the list `trees` contains only one single code tree.
      */
-    fun singleton(trees: List<CodeTree>): Boolean = trees.size == 1
+    fun singleton(trees: List<CodeTree>): Boolean = trees.size <= 1
 
     /**
      * The parameter `trees` of this function is a list of code trees ordered
@@ -182,7 +182,7 @@ object Huffman {
             else insertOrdered(combineTwo(firstTree, tailTree.first()), tailTree.tail())
         }
     internal fun combineTwo(first: CodeTree, second: CodeTree): CodeTree {
-        val leftIsFirst = weight(first) < weight(second)
+        val leftIsFirst = weight(first) > weight(second)
         val left = if (leftIsFirst) first else second
         val right = if (!leftIsFirst) first else second
         return Fork(left, right, chars(left) + chars(right), weight(left) + weight(right) )
@@ -191,7 +191,7 @@ object Huffman {
         if (list.isEmpty()) listOf(tree)
         else {
             val head = list.head()
-            if (weight(tree) < weight(head)) listOf(tree) + list
+            if (weight(tree) > weight(head)) listOf(tree) + list
             else listOf(head) + insertOrdered(tree, list.tail())
         }
 
@@ -227,7 +227,12 @@ object Huffman {
      * The parameter `chars` is an arbitrary text. This function extracts the character
      * frequencies from that text and creates a code tree based on them.
      */
-    fun createCodeTree(chars: List<Char>): CodeTree = TODO()
+    fun createCodeTree(chars: List<Char>): CodeTree {
+        val timesChar = times(chars)
+        val orderedLeafList = makeOrderedLeafList(timesChar)
+        val treeList = Huffman.until({ Huffman.singleton(it) }, { Huffman.combine(it) })(orderedLeafList)
+        return treeList.head()
+    }
 
 
     // Part 3: Decoding
