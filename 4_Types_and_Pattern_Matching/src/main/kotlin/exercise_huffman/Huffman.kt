@@ -2,7 +2,6 @@ package exercise_huffman
 
 import head
 import tail
-import java.util.*
 
 /**
  * Assignment 4: Huffman coding
@@ -192,7 +191,7 @@ object Huffman {
         val leftIsFirst = weight(first) > weight(second)
         val left = if (leftIsFirst) first else second
         val right = if (!leftIsFirst) first else second
-        return Fork(left, right, chars(left) + chars(right), weight(left) + weight(right))
+        return makeCodeTree(left, right)
     }
 
     internal fun insertOrdered(tree: CodeTree, list: List<CodeTree>): List<CodeTree> =

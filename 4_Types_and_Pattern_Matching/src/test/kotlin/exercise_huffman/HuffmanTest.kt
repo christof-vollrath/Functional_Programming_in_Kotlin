@@ -1,8 +1,8 @@
 package exercise_huffman
 
 import head
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 import tail
 
 class HuffManTest {
@@ -210,7 +210,7 @@ class HuffManTest {
     // encode
     @Test fun encode_single_char() {
         assertEquals(listOf<Integer>(), Huffman.encode(
-            Huffman.Leaf('A', 1), listOf<Char>('A')
+            Huffman.Leaf('A', 1), listOf('A')
         ))
     }
     @Test fun encode_two_chars_AB() {
