@@ -166,4 +166,44 @@ class HuffManTest {
         assertEquals(listOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), Huffman.chars(result))
         assertEquals(17, Huffman.weight(result))
     }
+
+    // decode
+    @Test fun decode_single_char() {
+        assertEquals(listOf('A'), Huffman.decode(
+            Huffman.Leaf('A', 1), listOf<Int>()
+        ))
+    }
+    @Test fun decode_two_chars_AB() {
+        assertEquals(listOf('A', 'B'), Huffman.decode(
+            Huffman.Fork(
+                Huffman.Leaf('A', 1), Huffman.Leaf('B', 2),
+                listOf('A', 'B'), 3
+            ),
+            listOf(0,1)
+        ))
+    }
+    @Test fun decode_two_chars_BA() {
+        assertEquals(listOf('B', 'A'), Huffman.decode(
+            Huffman.Fork(
+                Huffman.Leaf('B', 2), Huffman.Leaf('A', 1),
+                listOf('B', 'A'), 3
+            ),
+            listOf(0,1)
+        ))
+    }
+    @Test fun decode_three_chars_BA() {
+        assertEquals(listOf('A', 'B', 'A'), Huffman.decode(
+            Huffman.Fork(
+                Huffman.Leaf('B', 2), Huffman.Leaf('A', 1),
+                listOf('B', 'A'), 3
+            ),
+            listOf(1,0,1)
+        ))
+    }
+
+    // decodedSecret
+    @Test fun secret() {
+        assertEquals(listOf('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l'),
+            Huffman.decodedSecret())
+    }
 }

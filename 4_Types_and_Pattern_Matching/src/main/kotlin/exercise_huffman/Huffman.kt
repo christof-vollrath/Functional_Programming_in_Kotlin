@@ -241,7 +241,24 @@ object Huffman {
      * This function decodes the bit sequence `bits` using the code tree `tree` and returns
      * the resulting list of characters.
      */
-    fun decode(tree: CodeTree, bits: List<Integer>): List<Char> = TODO()
+    fun decode(tree: CodeTree, bits: List<Int>): List<Char> = decodeLoop(tree, tree, bits)
+    internal fun decodeLoop(fullTree: CodeTree, tree: CodeTree, bits: List<Int>): List<Char> =
+            when(tree) {
+                is Fork -> {
+                    val bitsHead = bits.head()
+                    if (bitsHead == 0)
+                        decodeLoop(fullTree, tree.left, bits.tail())
+                    else
+                        decodeLoop(fullTree, tree.right, bits.tail())
+                }
+                is Leaf -> {
+                    val result = listOf(tree.char)
+                    if (bits.isEmpty()) result
+                    else result + decodeLoop(fullTree, fullTree, bits)
+                }
+                else -> throw IllegalArgumentException("Unkown CodeTree subtype: ${tree.javaClass}")
+            }
+
 
     /**
      * A Huffman coding tree for the French language.
@@ -259,7 +276,7 @@ object Huffman {
     /**
      * Write a function that returns the decoded secret
      */
-    fun decodedSecret(): List<Char> = TODO()
+    fun decodedSecret(): List<Char> = decode(frenchCode, secret)
 
 
     // Part 4a: Encoding using Huffman tree
