@@ -236,4 +236,55 @@ class HuffManTest {
             Huffman.encode(Huffman.frenchCode, listOf('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l')))
     }
 
+    // codeBts
+    @Test fun codeBits_table_with_one_char() {
+        assertEquals(listOf(1), Huffman.codeBits(Huffman.CodeTable(listOf(Pair('a', listOf(1)))), 'a'))
+    }
+    @Test fun codeBits_table_with_some_chars() {
+        assertEquals(listOf(0), Huffman.codeBits(Huffman.CodeTable(listOf(Pair('a', listOf(1)), Pair('b', listOf(0)))), 'b'))
+    }
+
+    // convert
+    @Test fun convert_leave() {
+        assertEquals(Huffman.CodeTable(listOf(Pair('a', listOf<Int>()))),
+                Huffman.convert(Huffman.Leaf('a', 1)))
+    }
+    @Test fun convert_tree() {
+        assertEquals(Huffman.CodeTable(listOf(Pair('b', listOf(0)), Pair('a', listOf(1)))),
+            Huffman.convert(
+                Huffman.Fork(
+                    Huffman.Leaf('b', 2), Huffman.Leaf('a', 1),
+                    listOf('a', 'b'), 3
+                )
+            )
+        )
+    }
+    @Test fun convert_deep_tree() {
+        assertEquals(Huffman.CodeTable(listOf(Pair('c', listOf(0)), Pair('b', listOf(1,0)), Pair('a', listOf(1,1)))),
+            Huffman.convert(
+                Huffman.Fork(
+                    Huffman.Leaf('c', 4),
+                    Huffman.Fork(
+                        Huffman.Leaf('b', 2), Huffman.Leaf('a', 1),
+                        listOf('a', 'b'), 3
+                    ),
+                    listOf('a', 'b', 'c'), 7
+                )
+            )
+        )
+    }
+    @Test fun appendToPairs_empty_codeTable() {
+        assertEquals(Huffman.CodeTable(listOf()),
+            Huffman.prependToPairs(Huffman.CodeTable(listOf()), 1))
+    }
+    @Test fun appendToPairs_codeTable() {
+        assertEquals(Huffman.CodeTable(listOf(Pair('a', listOf(1,1)), Pair('b', listOf(1,0)))),
+                Huffman.prependToPairs(Huffman.CodeTable(listOf(Pair('a', listOf(1)), Pair('b', listOf(0)))), 1))
+    }
+
+    // quickEncode
+    @Test fun quickEncode_secret() {
+        assertEquals(Huffman.secret,
+                Huffman.quickEncode(Huffman.frenchCode, listOf('h', 'u', 'f', 'f', 'm', 'a', 'n', 'e', 's', 't', 'c', 'o', 'o', 'l')))
+    }
 }

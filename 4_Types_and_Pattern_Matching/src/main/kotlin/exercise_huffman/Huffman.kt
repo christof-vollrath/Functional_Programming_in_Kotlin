@@ -2,6 +2,7 @@ package exercise_huffman
 
 import head
 import tail
+import java.util.*
 
 /**
  * Assignment 4: Huffman coding
@@ -311,13 +312,15 @@ object Huffman {
 
     // Part 4b: Encoding using code table
 
-    interface CodeTable: List<Pair<Char, List<Integer>>>
+    data class CodeTable(val list: List<Pair<Char, List<Int>>>): List<Pair<Char, List<Int>>> by list
 
     /**
      * This function returns the bit sequence that represents the character `char` in
      * the code table `table`.
      */
-    fun codeBits(table: CodeTable, char: Char): List<Integer> = TODO()
+    fun codeBits(table: CodeTable, char: Char): List<Int> =
+        if (table.head().first == char) table.head().second
+        else codeBits(CodeTable(table.tail()), char)
 
     /**
      * Given a code tree, create a code table which contains, for every character in the
@@ -327,14 +330,23 @@ object Huffman {
      * a valid code tree that can be represented as a code table. Using the code tables of the
      * sub-trees, think of how to build the code table for the entire tree.
      */
-    fun convert(tree: CodeTree): CodeTable = TODO()
+    fun convert(tree: CodeTree): CodeTable =
+        when (tree) {
+            is Fork -> mergeCodeTables(convert(tree.left), convert(tree.right))
+            is Leaf -> CodeTable(listOf(Pair(tree.char, listOf())))
+            else -> throw IllegalArgumentException("Unkown CodeTree subtype: ${tree.javaClass}")
+        }
 
-    /**
-     * This function takes two code tables and merges them into one. Depending on how you
-     * use it in the `convert` method above, this merge method might also do some transformations
-     * on the two parameter code tables.
-     */
-    fun mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = TODO()
+    fun mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable =
+        CodeTable(prependToPairs(a, 0) + prependToPairs(b, 1))
+
+    internal fun prependToPairs(codeTable: CodeTable, i: Int): CodeTable =
+        if (codeTable.isEmpty()) codeTable
+        else {
+            val head = codeTable.head()
+            val appendedList = listOf(i) + head.second
+            CodeTable(listOf(Pair(head.first, appendedList)) + prependToPairs(CodeTable(codeTable.tail()), i))
+        }
 
     /**
      * This function encodes `text` according to the code tree `tree`.
@@ -342,6 +354,15 @@ object Huffman {
      * To speed up the encoding process, it first converts the code tree to a code table
      * and then uses it to perform the actual encoding.
      */
-    fun quickEncode(tree: CodeTree, text: List<Char>): List<Integer> = TODO()
-
+    fun quickEncode(tree: CodeTree, text: List<Char>): List<Int> {
+        val codeTable = convert(tree)
+        return quickEncodeLoop(codeTable, text)
+    }
+    internal fun quickEncodeLoop(table: CodeTable, text: List<Char>): List<Int> =
+        if (text.isEmpty()) listOf<Int>()
+        else {
+            val textHead = text.head()
+            val coded = codeBits(table, textHead)
+            coded + quickEncodeLoop(table, text.tail())
+        }
 }
