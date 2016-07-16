@@ -38,13 +38,13 @@ class HuffManTest {
         assertEquals(listOf(Huffman.Leaf('a', 1)), Huffman.makeOrderedLeafList(listOf(Pair('a', 1))))
     }
     @Test fun makeOrderedLeafList_on_list_with_two_elements() {
-        assertEquals(listOf(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1)), Huffman.makeOrderedLeafList(listOf(Pair('a', 1), Pair('b', 2))))
+        assertEquals(listOf(Huffman.Leaf('a', 1), Huffman.Leaf('b', 2)), Huffman.makeOrderedLeafList(listOf(Pair('a', 1), Pair('b', 2))))
     }
     @Test fun makeOrderedLeafList_on_list_with_some_elements() {
-        assertEquals(listOf(Huffman.Leaf('c', 50), Huffman.Leaf('a', 10), Huffman.Leaf('d', 3), Huffman.Leaf('b', 2)), Huffman.makeOrderedLeafList(listOf(Pair('a', 10), Pair('b', 2), Pair('c', 50), Pair('d', 3))))
+        assertEquals(listOf(Huffman.Leaf('b', 2), Huffman.Leaf('d', 3), Huffman.Leaf('a', 10), Huffman.Leaf('c', 50)), Huffman.makeOrderedLeafList(listOf(Pair('a', 10), Pair('b', 2), Pair('c', 50), Pair('d', 3))))
     }
     @Test fun highestLeaf_on_list_with_two_elements() {
-        assertEquals(Huffman.Leaf('b', 2), Huffman.highestLeaf(listOf(Pair('a', 1), Pair('b', 2))))
+        assertEquals(Huffman.Leaf('a', 1), Huffman.lowestLeaf(listOf(Pair('a', 1), Pair('b', 2))))
     }
     @Test fun removeTimes_on_empty_list() {
         assertTrue(Huffman.removeTimes('a', listOf<Pair<Char, Int>>()).isEmpty())
@@ -82,12 +82,12 @@ class HuffManTest {
         assertEquals(listOf(Huffman.Fork(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1), listOf('b','a'), 3)),
                 Huffman.combine(listOf(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1))))
     }
-    @Test fun combine_list_with_three_leaves_should_combine_them_2_and_insert_after() {
-        assertEquals(listOf(Huffman.Leaf('c', 4), Huffman.Fork(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1), listOf('b','a'), 3)),
+    @Test fun combine_list_with_three_leaves_should_combine_them_2_and_insert_before() {
+        assertEquals(listOf(Huffman.Fork(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1), listOf('b','a'), 3), Huffman.Leaf('c', 4)),
                 Huffman.combine(listOf(Huffman.Leaf('b', 2), Huffman.Leaf('a', 1), Huffman.Leaf('c', 4))))
     }
-    @Test fun combine_list_with_three_leaves_should_combine_them_2_and_insert_before() {
-        assertEquals(listOf(Huffman.Fork(Huffman.Leaf('b', 3), Huffman.Leaf('a', 2), listOf('b','a'), 5), Huffman.Leaf('c', 4)),
+    @Test fun combine_list_with_three_leaves_should_combine_them_2_and_insert_after() {
+        assertEquals(listOf(Huffman.Leaf('c', 4), Huffman.Fork(Huffman.Leaf('b', 3), Huffman.Leaf('a', 2), listOf('b','a'), 5)),
                 Huffman.combine(listOf(Huffman.Leaf('b', 3), Huffman.Leaf('a', 2), Huffman.Leaf('c', 4))))
     }
     // insertOrdered
@@ -95,10 +95,10 @@ class HuffManTest {
         assertEquals(listOf(Huffman.Leaf('a', 1)), Huffman.insertOrdered(Huffman.Leaf('a', 1), listOf<Huffman.CodeTree>()))
     }
     @Test fun insertOrdered_list_with_bigger_element() {
-        assertEquals(listOf(Huffman.Leaf('b', 2),Huffman.Leaf('a', 1)), Huffman.insertOrdered(Huffman.Leaf('a', 1), listOf(Huffman.Leaf('b', 2))))
+        assertEquals(listOf(Huffman.Leaf('a', 1), Huffman.Leaf('b', 2)), Huffman.insertOrdered(Huffman.Leaf('a', 1), listOf(Huffman.Leaf('b', 2))))
     }
     @Test fun insertOrdered_list_with_smaller_element() {
-        assertEquals(listOf(Huffman.Leaf('b', 2),Huffman.Leaf('a', 1)), Huffman.insertOrdered(Huffman.Leaf('b', 2), listOf(Huffman.Leaf('a', 1))))
+        assertEquals(listOf(Huffman.Leaf('a', 1), Huffman.Leaf('b', 2)), Huffman.insertOrdered(Huffman.Leaf('b', 2), listOf(Huffman.Leaf('a', 1))))
     }
 
     // until
@@ -139,8 +139,6 @@ class HuffManTest {
                                 Huffman.Leaf('F', 1), Huffman.Leaf('G', 1), Huffman.Leaf('H', 1)
                         )
                      )
-        println(result)
-        assertEquals(listOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), Huffman.chars(result.head()))
         assertEquals(17, Huffman.weight(result.head()))
     }
 
@@ -162,8 +160,6 @@ class HuffManTest {
     }
     @Test fun createCodeTree_for_exercise_data() {
         val result = Huffman.createCodeTree(Huffman.string2Chars("AAAAAAAABBBHGFEDC"))
-        println(result)
-        assertEquals(listOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), Huffman.chars(result))
         assertEquals(17, Huffman.weight(result))
     }
 

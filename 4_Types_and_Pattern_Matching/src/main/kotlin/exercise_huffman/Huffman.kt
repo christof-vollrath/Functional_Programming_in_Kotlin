@@ -136,29 +136,29 @@ object Huffman {
     fun makeOrderedLeafList(freqs: List<Pair<Char, Int>>): List<Leaf> =
             if (freqs.isEmpty()) listOf<Leaf>()
             else {
-                val max = highestLeaf(freqs)
+                val max = lowestLeaf(freqs)
                 listOf(max) + makeOrderedLeafList(removeTimes(max.char, freqs))
             }
 
-    internal fun highestLeaf(freqs: List<Pair<Char, Int>>): Leaf {
+    internal fun lowestLeaf(freqs: List<Pair<Char, Int>>): Leaf {
         val head = freqs.head()
         val headLeaf = Leaf(head.first, head.second)
         val tail = freqs.tail()
         if (tail.isEmpty()) return headLeaf
         else {
-            val maxTail = highestLeaf(tail)
-            if (headLeaf.weight < maxTail.weight) return maxTail
+            val minTail = lowestLeaf(tail)
+            if (headLeaf.weight > minTail.weight) return minTail
             else return headLeaf
         }
     }
 
     internal fun removeTimes(c: Char, pairs: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
-            if (pairs.isEmpty()) pairs
-            else {
-                val head = pairs.head()
-                if (head.first == c) pairs.tail() // Only once in list
-                else listOf(head) + removeTimes(c, pairs.tail())
-            }
+        if (pairs.isEmpty()) pairs
+        else {
+            val head = pairs.head()
+            if (head.first == c) pairs.tail() // Only once in list
+            else listOf(head) + removeTimes(c, pairs.tail())
+        }
 
 
     /**
@@ -198,7 +198,7 @@ object Huffman {
             if (list.isEmpty()) listOf(tree)
             else {
                 val head = list.head()
-                if (weight(tree) > weight(head)) listOf(tree) + list
+                if (weight(tree) < weight(head)) listOf(tree) + list
                 else listOf(head) + insertOrdered(tree, list.tail())
             }
 
