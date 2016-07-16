@@ -184,7 +184,7 @@ object Huffman {
                 val firstTree = trees.head()
                 val tailTree = trees.tail()
                 if (tailTree.isEmpty()) listOf(firstTree)
-                else insertOrdered(combineTwo(firstTree, tailTree.first()), tailTree.tail())
+                else insertOrdered(combineTwo(firstTree, tailTree.head()), tailTree.tail())
             }
 
     internal fun combineTwo(first: CodeTree, second: CodeTree): CodeTree {

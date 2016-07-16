@@ -4,6 +4,7 @@ import head
 import org.junit.Assert.*
 import org.junit.Test
 import tail
+import java.util.*
 
 class HuffManTest {
 
@@ -143,7 +144,7 @@ class HuffManTest {
     }
 
     // create CodeTree
-    @Test(expected=IndexOutOfBoundsException::class) fun createCodeTree_for_empty_string_should_throw_excpetion() {
+    @Test(expected= NoSuchElementException::class) fun createCodeTree_for_empty_string_should_throw_excpetion() {
         Huffman.createCodeTree(Huffman.string2Chars(""))
     }
     @Test fun createCodeTree_for_string_with_one_char_should_create_leaf() {
