@@ -54,3 +54,37 @@ fun Nat.toInt(): Int =
 fun Int.toNat(): Nat =
     if(this == 0) zero
     else Succ((this-1).toNat())
+
+// Expressions of Number and Sum
+
+interface Expr {
+    fun eval(): Int
+}
+
+class Num(val numValue: Int): Expr {
+    override fun eval() = numValue
+}
+
+class Sum(val e1: Expr, val e2: Expr): Expr {
+    override fun eval() = e1.eval() + e2.eval()
+}
+
+class Prod(val e1: Expr, val e2: Expr): Expr {
+    override fun eval() = e1.eval() * e2.eval()
+}
+
+fun show(expr: Expr, parentExpr: Expr? = null): String =
+    when (expr) {
+        is Num -> expr.numValue.toString()
+        is Sum -> {
+            val parenthesesNeeded = when (parentExpr) {
+                is Prod -> true
+                else -> false
+            }
+            (if (parenthesesNeeded) "(" else "") +
+            show(expr.e1, expr) + " + " + show(expr.e2, expr) +
+            (if (parenthesesNeeded) ")" else "")
+        }
+        is Prod -> show(expr.e1, expr) + " * " + show(expr.e2, expr)
+        else -> throw IllegalArgumentException("Unkown Expr subtype: ${expr.javaClass}")
+    }

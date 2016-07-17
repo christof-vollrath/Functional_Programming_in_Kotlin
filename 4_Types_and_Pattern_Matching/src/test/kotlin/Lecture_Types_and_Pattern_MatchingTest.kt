@@ -172,5 +172,27 @@ class TypesAndPatternMatchingTest {
     @Test fun ten_minus_three_should_be_seven() {
         assertEquals(7, ((10.toNat())-(3.toNat())).toInt())
     }
+
+    // Expressions of Number and Sum
+
+    @Test fun eval_expression_with_sum() {
+        assertEquals(3, Sum(Num(1), Num(2)).eval())
+    }
+    @Test fun eval_expression_with_sum_and_prod() {
+        assertEquals(7, Sum(Num(1), Prod(Num(2), Num(3))).eval())
+    }
+    @Test fun show_num() {
+        assertEquals("1", show(Num(1)))
+    }
+    @Test fun show_sum() {
+        assertEquals("1 + 2", show(Sum(Num(1), Num(2))))
+    }
+    @Test fun show_prod() {
+        assertEquals("1 * 2", show(Prod(Num(1), Num(2))))
+    }
+    @Test fun show_sum_prod_with_parentheses() {
+        assertEquals("(1 + 2) * 3", show(Prod(Sum(Num(1), Num(2)), Num(3))))
+    }
+
 }
 

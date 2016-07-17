@@ -159,7 +159,7 @@ class HuffManTest {
                 ),
                 Huffman.createCodeTree(Huffman.string2Chars("BAB")))
     }
-    @Test fun createCodeTree_for_exercise_data() {
+    @Test fun createCodeTree_for_larger_string() {
         val result = Huffman.createCodeTree(Huffman.string2Chars("AAAAAAAABBBHGFEDC"))
         assertEquals(17, Huffman.weight(result))
     }
