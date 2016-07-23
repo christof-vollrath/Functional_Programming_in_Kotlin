@@ -73,18 +73,32 @@ class Prod(val e1: Expr, val e2: Expr): Expr {
     override fun eval() = e1.eval() * e2.eval()
 }
 
-fun show(expr: Expr, parentExpr: Expr? = null): String =
+fun show(expr: Expr): String =
     when (expr) {
         is Num -> expr.numValue.toString()
         is Sum -> {
-            val parenthesesNeeded = when (parentExpr) {
-                is Prod -> true
+            show(expr.e1) + " + " + show(expr.e2)
+        }
+        is Prod -> {
+            val parentheses1 = parenthesesNeeded(expr.e1, expr)
+            val parentheses2 = parenthesesNeeded(expr.e2, expr)
+            (if (parentheses1) "(" else "") +
+            show(expr.e1) +
+            (if (parentheses1) ")" else "") +
+            " * " +
+            (if (parentheses2) "(" else "") +
+            show(expr.e2) +
+            (if (parentheses2) ")" else "")
+        }
+        else -> throw IllegalArgumentException("Unkown Expr subtype: ${expr.javaClass}")
+    }
+
+internal fun parenthesesNeeded(expr: Expr, parentExpr: Expr): Boolean =
+    when (parentExpr) {
+        is Prod ->
+            when (expr) {
+                is Sum -> true
                 else -> false
             }
-            (if (parenthesesNeeded) "(" else "") +
-            show(expr.e1, expr) + " + " + show(expr.e2, expr) +
-            (if (parenthesesNeeded) ")" else "")
-        }
-        is Prod -> show(expr.e1, expr) + " * " + show(expr.e2, expr)
-        else -> throw IllegalArgumentException("Unkown Expr subtype: ${expr.javaClass}")
+        else -> false
     }
