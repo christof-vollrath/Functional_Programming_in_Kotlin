@@ -1,3 +1,5 @@
+import java.util.*
+
 // Pure Booleans
 
 abstract class PureBoolean {
@@ -102,3 +104,56 @@ internal fun parenthesesNeeded(expr: Expr, parentExpr: Expr): Boolean =
             }
         else -> false
     }
+
+// Variance
+
+interface Function1<in T, out U> {
+    fun apply(x: T): U
+}
+
+interface Function1a<in T, out U> {
+//    fun apply(x: U): T  // Compiler checks if in, out are used correctly
+}
+
+abstract class IntList {}
+class NonEmptyList: IntList() {}
+class EmptyList: IntList() {}
+
+class A: Function1<IntList, NonEmptyList> {
+    override fun apply(x: IntList): NonEmptyList = NonEmptyList()
+}
+
+class B: Function1<NonEmptyList, IntList> {
+    override fun apply(x: NonEmptyList): IntList = NonEmptyList()
+}
+
+val a1: Function1<IntList, NonEmptyList> = A()
+val b1: Function1<NonEmptyList, IntList> = a1
+val b2: Function1<NonEmptyList, IntList> = B()
+//val a2: Function1<IntList, NonEmptyList> = b2 // Type mismatch
+// Function subtyping: argument types must be contravariant, result types must be covariant
+
+interface MyList<out T> {
+    fun isEmpty(): Boolean
+    val head: T
+    val tail: MyList<T>
+}
+
+class Cons<T>(override val head: T, override val tail: MyList<T>): MyList<T> {
+    override fun isEmpty(): Boolean = false
+}
+object Nil: MyList<Nothing> {
+    override val head: Nothing
+        get() { throw NoSuchElementException("head of EmptyList") }
+    override val tail: Nothing
+        get() { throw NoSuchElementException("tail of EmptyList") }
+    override fun isEmpty() = true
+}
+
+val lNil = Nil
+val l1 = Cons("e1", Nil) // If List<out T> would be declared without out, we would have a type error at Nil
+
+fun<U> prepend(elem: U, list: MyList<U>): MyList<U> = Cons(elem, list) // Can not be member function of MyList, since a different type is returned
+val intList = Cons(1, Nil)
+val numList: MyList<Number> = prepend(2.0, intList)
+// val StringList: MyList<String> = prepend("2", intList) // Type error because types are not covariant
