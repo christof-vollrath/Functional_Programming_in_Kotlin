@@ -1,6 +1,5 @@
 package exercise_huffman
 
-import head
 import tail
 
 /**
@@ -119,12 +118,12 @@ object Huffman {
      */
     fun times(chars: List<Char>): List<Pair<Char, Int>> =
             if (chars.isEmpty()) listOf()
-            else mergeTimes(chars.head(), times(chars.tail()))
+            else mergeTimes(chars.first(), times(chars.tail()))
 
     internal fun mergeTimes(c: Char, pairs: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
             if (pairs.isEmpty()) listOf(Pair(c, 1))
-            else if (c == pairs.head().first) listOf(Pair(c, pairs.head().second + 1)) + pairs.tail()
-            else listOf(pairs.head()) + mergeTimes(c, pairs.tail())
+            else if (c == pairs.first().first) listOf(Pair(c, pairs.first().second + 1)) + pairs.tail()
+            else listOf(pairs.first()) + mergeTimes(c, pairs.tail())
 
     /**
      * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
@@ -141,7 +140,7 @@ object Huffman {
             }
 
     internal fun lowestLeaf(freqs: List<Pair<Char, Int>>): Leaf {
-        val head = freqs.head()
+        val head = freqs.first()
         val headLeaf = Leaf(head.first, head.second)
         val tail = freqs.tail()
         if (tail.isEmpty()) return headLeaf
@@ -155,7 +154,7 @@ object Huffman {
     internal fun removeTimes(c: Char, pairs: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
         if (pairs.isEmpty()) pairs
         else {
-            val head = pairs.head()
+            val head = pairs.first()
             if (head.first == c) pairs.tail() // Only once in list
             else listOf(head) + removeTimes(c, pairs.tail())
         }
@@ -181,10 +180,10 @@ object Huffman {
     fun combine(trees: List<CodeTree>): List<CodeTree> =
             if (trees.isEmpty()) trees
             else {
-                val firstTree = trees.head()
+                val firstTree = trees.first()
                 val tailTree = trees.tail()
                 if (tailTree.isEmpty()) listOf(firstTree)
-                else insertOrdered(combineTwo(firstTree, tailTree.head()), tailTree.tail())
+                else insertOrdered(combineTwo(firstTree, tailTree.first()), tailTree.tail())
             }
 
     internal fun combineTwo(first: CodeTree, second: CodeTree): CodeTree {
@@ -197,7 +196,7 @@ object Huffman {
     internal fun insertOrdered(tree: CodeTree, list: List<CodeTree>): List<CodeTree> =
             if (list.isEmpty()) listOf(tree)
             else {
-                val head = list.head()
+                val head = list.first()
                 if (weight(tree) < weight(head)) listOf(tree) + list
                 else listOf(head) + insertOrdered(tree, list.tail())
             }
@@ -240,7 +239,7 @@ object Huffman {
         val timesChar = times(chars)
         val orderedLeafList = makeOrderedLeafList(timesChar)
         val treeList = Huffman.until({ Huffman.singleton(it) }, { Huffman.combine(it) })(orderedLeafList)
-        return treeList.head()
+        return treeList.first()
     }
 
 
@@ -255,7 +254,7 @@ object Huffman {
     internal fun decodeLoop(fullTree: CodeTree, tree: CodeTree, bits: List<Int>): List<Char> =
             when (tree) {
                 is Fork -> {
-                    val bitsHead = bits.head()
+                    val bitsHead = bits.first()
                     if (bitsHead == 0)
                         decodeLoop(fullTree, tree.left, bits.tail())
                     else
@@ -299,7 +298,7 @@ object Huffman {
     fun encodeLoop(fullTree: CodeTree, tree: CodeTree, text: List<Char>): List<Int> =
         if (text.isEmpty()) listOf<Int>()
         else {
-            val c = text.head()
+            val c = text.first()
             when (tree) {
                 is Fork ->
                     if (chars(tree.left).contains(c)) listOf(0) + encodeLoop(fullTree, tree.left, text)
@@ -318,7 +317,7 @@ object Huffman {
      * the code table `table`.
      */
     fun codeBits(table: CodeTable, char: Char): List<Int> =
-        if (table.head().first == char) table.head().second
+        if (table.first().first == char) table.first().second
         else codeBits(CodeTable(table.tail()), char)
 
     /**
@@ -342,7 +341,7 @@ object Huffman {
     internal fun prependToPairs(codeTable: CodeTable, i: Int): CodeTable =
         if (codeTable.isEmpty()) codeTable
         else {
-            val head = codeTable.head()
+            val head = codeTable.first()
             val appendedList = listOf(i) + head.second
             CodeTable(listOf(Pair(head.first, appendedList)) + prependToPairs(CodeTable(codeTable.tail()), i))
         }
@@ -360,7 +359,7 @@ object Huffman {
     internal fun quickEncodeLoop(table: CodeTable, text: List<Char>): List<Int> =
         if (text.isEmpty()) listOf<Int>()
         else {
-            val textHead = text.head()
+            val textHead = text.first()
             val coded = codeBits(table, textHead)
             coded + quickEncodeLoop(table, text.tail())
         }

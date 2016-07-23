@@ -1,6 +1,5 @@
 package exercise_huffman
 
-import head
 import org.junit.Assert.*
 import org.junit.Test
 import tail
@@ -140,7 +139,7 @@ class HuffManTest {
                                 Huffman.Leaf('F', 1), Huffman.Leaf('G', 1), Huffman.Leaf('H', 1)
                         )
                      )
-        assertEquals(17, Huffman.weight(result.head()))
+        assertEquals(17, Huffman.weight(result.first()))
     }
 
     // create CodeTree
