@@ -19,7 +19,7 @@ class Lecture_Lists_Test : FunSpec() { init {
         }
     }
     test("Get returns element from list") {
-        listOf("One","Two","Three").get(1) shouldBe "Two"
+        listOf("One","Two","Three")[1] shouldBe "Two"
     }
     test("Drop returns sublist from list") {
         listOf("One","Two","Three").drop(1) shouldBe listOf("Two","Three")

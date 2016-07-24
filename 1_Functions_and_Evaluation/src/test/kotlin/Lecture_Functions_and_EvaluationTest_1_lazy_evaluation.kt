@@ -1,7 +1,6 @@
 
-import org.junit.Test
-import org.junit.Assert.*
 import org.junit.Ignore
+import org.junit.Test
 
 class Functions_and_EvaluationTest_lazy_evaluation {
 

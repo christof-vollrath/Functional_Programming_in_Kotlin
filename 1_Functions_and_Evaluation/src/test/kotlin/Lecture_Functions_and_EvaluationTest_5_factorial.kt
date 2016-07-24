@@ -1,7 +1,7 @@
 
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.Assert.*
-import org.junit.Ignore
 
 // Tail recursion
 

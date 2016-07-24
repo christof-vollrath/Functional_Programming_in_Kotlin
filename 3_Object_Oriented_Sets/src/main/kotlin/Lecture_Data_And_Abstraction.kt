@@ -53,7 +53,7 @@ class Cons<T>(override val head: T, override val tail: ConsList<T>): ConsList<T>
     override val empty = false
 }
 
-fun <T> singleton(elem: T) = Cons<T>(elem, Nil<T>())
+fun <T> singleton(elem: T) = Cons(elem, Nil<T>())
 
 fun <T> nth(n: Int, list: ConsList<T>): T =
     if (list.empty) throw IndexOutOfBoundsException()

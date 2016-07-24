@@ -1,7 +1,6 @@
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.Assert.*
-import org.junit.Ignore
 
 class Functions_and_EvaluationTest_3_newtons_method {
 
