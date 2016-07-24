@@ -194,5 +194,22 @@ class TypesAndPatternMatchingTest {
         assertEquals("(1 + 2) * 3", show(Prod(Sum(Num(1), Num(2)), Num(3))))
     }
 
+    // Lists
+    @Test fun head_should_return_first_element() {
+        val h = listOf(1,2,3).first()
+        assertEquals(1, h)
+    }
+    @Test fun tail_should_return_list_without_first_element() {
+        val t = listOf(1,2,3).tail() // With fun<T> List<T>.tail(): List<T> = subList(1, size)
+        assertEquals(listOf(2,3), t)
+    }
+    @Test fun append_element_to_list() {
+        val l = listOf(1,2) + 3
+        assertEquals(listOf(1,2,3), l)
+    }
+    @Test fun append_two_lists() {
+        val l = listOf(1) + listOf(2,3) // Also example for prepend
+        assertEquals(listOf(1,2,3), l)
+    }
 }
 
