@@ -1,0 +1,29 @@
+allprojects {
+	group 'taobits.net'
+	version '1.0-SNAPSHOT'
+/*
+	buildscript {
+	    ext.kotlin_version = '1.0.2'
+	    repositories {
+		mavenCentral()
+	    }
+	    dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	    }
+	}
+
+	apply plugin: 'kotlin'
+
+	repositories {
+	    mavenCentral()
+	    maven { url "http://repository.jetbrains.com/all" }
+	}
+
+	dependencies {
+	    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	    testCompile "junit:junit:4.12"
+	    testCompile "com.google.truth:truth:0.28"
+	}
+*/
+}
+
