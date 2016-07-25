@@ -1,5 +1,5 @@
 fun <T> pack(list: List<T>): List<List<T>> =
-    if (list.isEmpty()) listOf<List<T>>()
+    if (list.isEmpty()) emptyList()
     else if (list.size == 1) listOf(list)
     else {
         val head = list.first()
