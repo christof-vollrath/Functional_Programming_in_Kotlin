@@ -44,8 +44,13 @@ class Lecture_Collections_Test : FunSpec() { init {
     test("Zip and unzip of mixed types") {
         (1..16).zip("Alles in Butter".asIterable()).unzip() shouldBe Pair((1..15).toList(), "Alles in Butter".toList())
     }
+
     test("flatmap") {
         "Alles in Butter".flatMap {listOf('.', it)}.joinToString("") shouldBe(".A.l.l.e.s. .i.n. .B.u.t.t.e.r")
+    }
+
+    test("flatten") {
+        listOf(listOf(1,2,3), listOf(4,5,6), listOf(7,8,9)).flatten() shouldBe listOf(1,2,3,4,5,6,7,8,9)
     }
 
     // Examples
@@ -61,11 +66,10 @@ class Lecture_Collections_Test : FunSpec() { init {
     fun scalarProduct(v1: Collection<Double>, v2: Collection<Double>): Double =
             v1.zip(v2).map { val (x, y) = it; x * y }.sum()
     test("Scalar product of [1,2,3] and [2,2,2] should be 12") {
-        scalarProduct(listOf(1.0,2.0,3.0), listOf(2.0,2.0,2.0)) shouldBe 12.0
+        scalarProduct(listOf(1.0,2.0,3.0), listOf(2.0,2.0,2.0)) shouldBe (12.0 plusOrMinus 0.1)
     }
 
     // High-level test for prime
-    fun isPrime(i: Int): Boolean = ! (2..(i/2)).any { i % it == 0 }
     test("Prime") {
         isPrime(2) shouldBe true
         isPrime(3) shouldBe true
@@ -80,6 +84,50 @@ class Lecture_Collections_Test : FunSpec() { init {
     // Example Lecture 6.2
     test("pairsSumPrime according to example for n = 7") {
         pairsSumPrime(7) shouldBe listOf(Pair(2,1),Pair(3,2),Pair(4,1),Pair(4,3),Pair(5,2),Pair(6,1),Pair(6,5))
+    }
+    test("pairsSumPrime2 according to example for n = 7") {
+        pairsSumPrime2(7) shouldBe listOf(Pair(2,1),Pair(3,2),Pair(4,1),Pair(4,3),Pair(5,2),Pair(6,1),Pair(6,5))
+    }
+    test("pairsSumPrime3 according to example for n = 7") {
+        pairsSumPrime3(7) shouldBe listOf(Pair(2,1),Pair(3,2),Pair(4,1),Pair(4,3),Pair(5,2),Pair(6,1),Pair(6,5))
+    }
+
+    // Sets
+    test("simple set") {
+        setOf("apple", "banana", "pear").contains("pear") shouldBe true
+    }
+    test("Set from range") {
+        (1..3).toSet().contains(2) shouldBe true
+    }
+    test("Sets should not contain duplicates") {
+        setOf(1,2,3,1).size shouldBe 3 // Duplicate 1 ignored
+    }
+    test("Map on sets") {
+        setOf(1,2,3).map{it+1}.toSet() shouldBe setOf(2,3,4)
+    }
+
+    // Queens
+    test("positionsWithRow should add column") {
+        positionsWithRow(listOf(0,3,1)) shouldBe listOf(Pair(2,0), Pair(1,3), Pair(0,1))
+    }
+    test("isSafe should return false if queens are in same column") {
+        isSafe(0, listOf(0)) shouldBe false
+        isSafe(2, listOf(0,1,2)) shouldBe false
+    }
+    test("isSafe should return false if queens are in same row") {
+        isSafe(1, listOf(0)) shouldBe false
+    }
+    test("isSafe should return true if queens are not in same row") {
+        isSafe(0, listOf(1,3)) shouldBe true
+    }
+    test("extendSolution should return the single position for n = 1") {
+        extendSolution(1, emptyList<Int>()) shouldBe setOf(listOf(0))
+    }
+    test("extendSolution should return two positions for n = 2") {
+        extendSolution(1, listOf(0)) shouldBe setOf(listOf(0),listOf(1))
+    }
+    test("queens for n = 2") {
+        queens(2) shouldBe setOf(listOf(0,2))
     }
 } }
 
