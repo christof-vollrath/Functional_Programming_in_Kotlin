@@ -21,9 +21,8 @@ fun pairsSumPrime2(n: Int): List<Pair<Int, Int>> { // Using classic for loop
     return result
 }
 
-fun <T> Observable<T>.debug(s: String): Observable<T> {
-    return this.doOnNext({println("onNext $s: ${it} - [${Thread.currentThread().getName()}]")})
-}
+fun <T> Observable<T>.debug(s: String): Observable<T> = this.doOnNext({println("onNext $s: ${it} - [${Thread.currentThread().getName()}]")})
+
 fun pairsSumPrime3(n: Int): List<Pair<Int, Int>> = // Using RxJava
     observable<Pair<Int, Int>> {
         for (i in 1..(n - 1))
