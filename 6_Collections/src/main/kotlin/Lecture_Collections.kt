@@ -37,6 +37,14 @@ fun pairsSumPrime3(n: Int): List<Pair<Int, Int>> = // Using RxJava
     .debug("toList")
     .toBlocking().single()
 
+fun pairsSumPrime4(n: Int): List<Pair<Int, Int>> = // Scala-Style for loop in kotlin
+        LinkedList<Pair<Int, Int>>().apply {
+        for (i in 1..(n - 1))
+            for (j in 1..(i - 1))
+                if (isPrime(i + j))
+                    add(Pair(i,j))
+    }
+
 // N Queen problem
 // One solution is a list of columns for each queen while every queen occupies one row
 fun queens(n: Int): Set<List<Int>> =

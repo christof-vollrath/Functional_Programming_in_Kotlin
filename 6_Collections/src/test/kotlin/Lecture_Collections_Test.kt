@@ -91,6 +91,9 @@ class Lecture_Collections_Test : FunSpec() { init {
     test("pairsSumPrime3 according to example for n = 7") {
         pairsSumPrime3(7) shouldBe listOf(Pair(2,1),Pair(3,2),Pair(4,1),Pair(4,3),Pair(5,2),Pair(6,1),Pair(6,5))
     }
+    test("pairsSumPrime4 according to example for n = 7") {
+        pairsSumPrime4(7) shouldBe listOf(Pair(2,1),Pair(3,2),Pair(4,1),Pair(4,3),Pair(5,2),Pair(6,1),Pair(6,5))
+    }
 
     // Sets
     test("simple set") {
