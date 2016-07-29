@@ -111,26 +111,38 @@ class Lecture_Collections_Test : FunSpec() { init {
 
     // Queens
     test("positionsWithRow should add column") {
-        positionsWithRow(listOf(0,3,1)) shouldBe listOf(Pair(2,0), Pair(1,3), Pair(0,1))
+        positionsWithRow(listOf(0,3,1)) shouldBe setOf(Pair(2,0), Pair(1,3), Pair(0,1))
     }
-    test("isSafe should return false if queens are in same column") {
-        isSafe(0, listOf(0)) shouldBe false
-        isSafe(2, listOf(0,1,2)) shouldBe false
+    test("isSafe") {
+        val textTab = table(
+                headers("pos",   "queens",                             "expected"),
+                row(Pair(1,0), setOf(Pair(0,0)),                       false), // same col
+                row(Pair(3,1), setOf(Pair(2,0),Pair(1,1),Pair(0,2)),   false),
+                row(Pair(1,1), setOf(Pair(0,0)),                       false), // diagonal
+                row(Pair(0,0), setOf(Pair(1,1)),                       false),
+                row(Pair(3,3), setOf(Pair(0,0),Pair(1,0),Pair(2,0)),   false),
+                row(Pair(0,1), setOf(Pair(0,0)),                       false), // same row
+                row(Pair(3,1), setOf(Pair(0,0)),                       true),
+                row(Pair(3,2), setOf(Pair(0,1),Pair(1,3),Pair(2,0)),   true)
+        )
+        forAll(textTab) { pos, queens, expected ->
+            isSafe(pos, queens) shouldBe expected
+        }
+
     }
-    test("isSafe should return false if queens are in same row") {
-        isSafe(1, listOf(0)) shouldBe false
+    test("queens for n = 1") {
+        queens(1) shouldBe setOf(listOf(0))
     }
-    test("isSafe should return true if queens are not in same row") {
-        isSafe(0, listOf(1,3)) shouldBe true
+    test("queens for n = 4") {
+        queens(4) shouldBe setOf(listOf(1,3,0,2), listOf(2,0,3,1))
     }
-    test("extendSolution should return the single position for n = 1") {
-        extendSolution(1, emptyList<Int>()) shouldBe setOf(listOf(0))
-    }
-    test("extendSolution should return two positions for n = 2") {
-        extendSolution(1, listOf(0)) shouldBe setOf(listOf(0),listOf(1))
-    }
-    test("queens for n = 2") {
-        queens(2) shouldBe setOf(listOf(0,2))
+    test("queens for n = 8") {
+        val queensSet = queens(8)
+        for (queens in queensSet) {
+            for (pos in queens) print("$pos ")
+            println()
+        }
+        queensSet.size shouldBe 92 // See https://en.wikipedia.org/wiki/Eight_queens_puzzle
     }
 } }
 
