@@ -1,6 +1,6 @@
 import rx.Observable
 import rx.lang.kotlin.observable
-import java.util.LinkedList
+import java.util.*
 
 // High-level test for prime
 
@@ -48,24 +48,37 @@ fun pairsSumPrime4(n: Int): List<Pair<Int, Int>> = // Scala-Style for loop in ko
 // N Queen problem
 // One solution is a list of columns for each queen while every queen occupies one row
 fun queens(n: Int): Set<List<Int>> =
-    if (n == 0) setOf(emptyList<Int>())
-    else queens(n-1).flatMap {
-        solution -> extendSolution(n, solution)}.toSet()
+    placeQueens(n, n)
 
-internal fun extendSolution(n: Int, solution: List<Int>): Set<List<Int>> =
-        (0..(n-1)).map { col -> Pair(col, solution) }
-            .filter { val (col, solution) = it; isSafe(col, solution)}
-            .map { val (col, solution) = it; solution + col}
-            .toSet()
+internal fun placeQueens(n: Int, k: Int): Set<List<Int>> =
+        if (k == 0) setOf(emptyList<Int>())
+        else LinkedHashSet<List<Int>>().apply {
+            for (queens in placeQueens(n, k-1))
+                for (col in 0..n-1)
+                    if (isSafe(col, queens))
+                        this.add(listOf(col) + queens)
+        }
 
-internal fun isSafe(c: Int, queens: List<Int>): Boolean {
-    val r = queens.size
-    val positionsWithRow = positionsWithRow(queens)
-    return positionsWithRow.all {
+internal fun isSafe(pos: Int, queens: List<Int>): Boolean =
+    isSafe(Pair(queens.size, pos), positionsWithRow(queens))
+
+internal fun isSafe(pos: Pair<Int,Int>, queens: Set<Pair<Int,Int>>): Boolean {
+    val (r, c) = pos
+    return queens.all {
         val (row, col) = it
-        col != c && Math.abs(col - c) != r - row
+        col != c && row != r && Math.abs(col - c) != Math.abs(r - row)
     }
 }
 
 internal fun positionsWithRow(positions: List<Int>) =
-        ((positions.size-1) downTo 0).zip(positions)
+        ((positions.size-1) downTo 0).zip(positions).toSet()
+
+fun showQueens(queens: List<Int>): String =
+    StringBuffer().apply {
+       for (col in queens.reversed()) {
+           for (i in 0..queens.size-1)
+               if (i == col) this.append('x') else this.append('*')
+           this.append('\n')
+       }
+
+    }.toString()

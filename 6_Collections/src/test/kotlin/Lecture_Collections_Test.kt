@@ -138,10 +138,8 @@ class Lecture_Collections_Test : FunSpec() { init {
     }
     test("queens for n = 8") {
         val queensSet = queens(8)
-        for (queens in queensSet) {
-            for (pos in queens) print("$pos ")
-            println()
-        }
+        for (queens in queensSet)
+            println(showQueens(queens))
         queensSet.size shouldBe 92 // See https://en.wikipedia.org/wiki/Eight_queens_puzzle
     }
 } }
