@@ -48,18 +48,19 @@ fun pairsSumPrime4(n: Int): List<Pair<Int, Int>> = // Scala-Style for loop in ko
 // N Queen problem
 // One solution is a list of columns for each queen while every queen occupies one row
 
-fun queens(n: Int): Set<List<Int>> =
-    placeQueens(n, n)
+fun queens(n: Int): Set<List<Int>> {
+    // Places k queens on a n x n field
+    fun placeQueens(k: Int): Set<List<Int>> =
+            if (k == 0) setOf(emptyList<Int>())
+            else LinkedHashSet<List<Int>>().apply {
+                for (queens in placeQueens(k-1))
+                    for (col in 0..n-1)
+                        if (isSafe(col, queens))
+                            this.add(listOf(col) + queens)
+            }
+    return placeQueens(n)
+}
 
-// Places k queens on a n x n field
-internal fun placeQueens(n: Int, k: Int): Set<List<Int>> =
-        if (k == 0) setOf(emptyList<Int>())
-        else LinkedHashSet<List<Int>>().apply {
-            for (queens in placeQueens(n, k-1))
-                for (col in 0..n-1)
-                    if (isSafe(col, queens))
-                        this.add(listOf(col) + queens)
-        }
 
 internal fun isSafe(pos: Int, queens: List<Int>): Boolean =
     isSafe(Pair(queens.size, pos), positionsWithRow(queens))
@@ -88,6 +89,7 @@ fun showQueens(queens: List<Int>): String =
 // Polynomial x^3-2x+5
 
 class Polynomial(val terms: Map<Int, Double>) {
+    constructor(vararg pairs: Pair<Int, Double>): this(pairs.toMap())
     override fun toString(): String =
         StringBuilder().apply {
             terms.entries.sortedByDescending { it.key }
