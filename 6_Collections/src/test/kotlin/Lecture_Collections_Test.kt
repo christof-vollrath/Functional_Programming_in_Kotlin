@@ -189,6 +189,34 @@ class Lecture_Collections_Test : FunSpec() { init {
         fruits.groupBy { it.get(0) } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
     }
 
+    // Variable arguments
+
+    test("Function with varargs") {
+        fun parametersToList(vararg p: Int) =
+                p.toList()
+
+        parametersToList(1,2,3) shouldBe listOf(1,2,3)
+    }
+
+    class WithVarargs(vararg p: Int) {
+        val ints: List<Int>
+        init {
+            ints = p.toList()
+        }
+    }
+
+    test("Class with varargs constructor") {
+        WithVarargs(1,2,3).ints shouldBe listOf(1,2,3)
+    }
+
+    class WithVarargsInSecondaryConstructor(val ints: List<Int>) {
+        constructor(vararg p: Int): this(p.toList())
+    }
+
+    test("Class with varargs constructor in secondary constructor") {
+        WithVarargsInSecondaryConstructor(1,2,3).ints shouldBe listOf(1,2,3)
+    }
+
     // Polynomials
 
     test("Polynomial toString") {
@@ -197,9 +225,9 @@ class Lecture_Collections_Test : FunSpec() { init {
     }
 
     test("Polynomial +") {
-        val p1 = Polynomial(mapOf(1 to 2.0, 3 to 4.0, 5 to 6.2))
-        val p2 = Polynomial(mapOf(0 to 3.0, 3 to 7.0))
-        p1 + p2 shouldBe Polynomial(mapOf(5 to 6.2, 3 to 11.0, 1 to 2.0, 0 to 3.0))
+        val p1 = Polynomial(1 to 2.0, 3 to 4.0, 5 to 6.2)
+        val p2 = Polynomial(0 to 3.0, 3 to 7.0)
+        p1 + p2 shouldBe Polynomial(5 to 6.2, 3 to 11.0, 1 to 2.0, 0 to 3.0)
     }
 } }
 
