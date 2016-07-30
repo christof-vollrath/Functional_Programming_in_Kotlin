@@ -142,5 +142,64 @@ class Lecture_Collections_Test : FunSpec() { init {
             println(showQueens(queens))
         queensSet.size shouldBe 92 // See https://en.wikipedia.org/wiki/Eight_queens_puzzle
     }
+
+    // Maps
+    test("Creating map and accessing") {
+        val map = mapOf(1 to "one", 2 to "two", 3 to "three")
+        map.size shouldBe 3
+        map[1] shouldBe "one"
+        map[2] shouldBe "two"
+        map[3] shouldBe "three"
+        map[4] shouldBe null
+    }
+
+    test("Adding to existing map and changing") {
+        val map = mapOf(1 to "one", 2 to "two", 3 to "three")
+        val map2 = map + (4 to "four")
+        map2.size shouldBe 4
+        map2[4] shouldBe "four"
+
+        val map3 = mutableMapOf(1 to "one", 2 to "two", 3 to "three")
+        map3 += (2 to "deux")
+        map3[2] shouldBe "deux"
+    }
+
+    test("to in maps idiom is like Pair") {
+        Pair(1,2) shouldBe (1 to 2)
+    }
+
+    test("Iterating over maps") {
+        val map =  mapOf(1 to "one", 2 to "two", 3 to "three")
+        val sb = StringBuffer()
+        for ((k,v) in map) {
+            sb.append(v + " ")
+        }
+        sb.toString() shouldBe "one two three "
+    }
+
+    // Sorting and Grouping
+
+    test("Sort list") {
+        val fruits = listOf("apple", "pear", "orange", "pineapple")
+        fruits.groupBy { it.get(0) } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
+    }
+
+    test("Group list") {
+        val fruits = listOf("apple", "pear", "orange", "pineapple")
+        fruits.groupBy { it.get(0) } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
+    }
+
+    // Polynomials
+
+    test("Polynomial toString") {
+        Polynomial(mapOf()).toString() shouldBe ""
+        Polynomial(mapOf(1 to -2.0, 3 to 1.0, 0 to 5.0)).toString() shouldBe "x^3-2.0x+5.0"
+    }
+
+    test("Polynomial +") {
+        val p1 = Polynomial(mapOf(1 to 2.0, 3 to 4.0, 5 to 6.2))
+        val p2 = Polynomial(mapOf(0 to 3.0, 3 to 7.0))
+        p1 + p2 shouldBe Polynomial(mapOf(5 to 6.2, 3 to 11.0, 1 to 2.0, 0 to 3.0))
+    }
 } }
 

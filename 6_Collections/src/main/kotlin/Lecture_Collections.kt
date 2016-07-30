@@ -47,9 +47,11 @@ fun pairsSumPrime4(n: Int): List<Pair<Int, Int>> = // Scala-Style for loop in ko
 
 // N Queen problem
 // One solution is a list of columns for each queen while every queen occupies one row
+
 fun queens(n: Int): Set<List<Int>> =
     placeQueens(n, n)
 
+// Places k queens on a n x n field
 internal fun placeQueens(n: Int, k: Int): Set<List<Int>> =
         if (k == 0) setOf(emptyList<Int>())
         else LinkedHashSet<List<Int>>().apply {
@@ -82,3 +84,50 @@ fun showQueens(queens: List<Int>): String =
        }
 
     }.toString()
+
+// Polynomial x^3-2x+5
+
+class Polynomial(val terms: Map<Int, Double>) {
+    override fun toString(): String =
+        StringBuilder().apply {
+            terms.entries.sortedByDescending { it.key }
+                .forEachIndexed { i, exponentFactor ->
+                    val (exponent, factor) = exponentFactor
+                    if (factor != 0.0) {
+                        if (factor > 0.0 && i > 0) this.append('+') // Negative factors will add a - by themself
+                        if (factor != 1.0) this.append(factor)
+                        if (exponent != 0) {
+                            this.append('x')
+                            if (exponent != 1) this.append('^').append(exponent)
+                        }
+                    }
+            }
+        }.toString()
+
+    operator fun plus(other: Polynomial): Polynomial = Polynomial(this.terms + adjustTerms(other.terms, this.terms))
+
+    private fun adjustTerms(terms: Map<Int, Double>, termsToMerge: Map<Int, Double>): Map<Int, Double> =
+        HashMap<Int, Double>().apply {
+            terms.forEach {
+                val termToMerge = termsToMerge[it.key]
+                if (termToMerge != null) this.put(it.key, it.value + termToMerge)
+                else this.put(it.key, it.value)
+            }
+        }
+
+    override fun equals(other: Any?): Boolean{
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Polynomial
+
+        if (terms != other.terms) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int{
+        return terms.hashCode()
+    }
+
+}
