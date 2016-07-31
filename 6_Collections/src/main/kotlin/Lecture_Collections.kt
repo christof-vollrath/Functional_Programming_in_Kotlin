@@ -1,5 +1,6 @@
 import rx.Observable
 import rx.lang.kotlin.observable
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 // High-level test for prime
@@ -105,7 +106,7 @@ class Polynomial(val terms: Map<Int, Double>) {
                     }
             }
         }.toString()
-
+/*  // Variant using + for maps
     operator fun plus(other: Polynomial): Polynomial = Polynomial(this.terms + adjustTerms(other.terms, this.terms))
 
     private fun adjustTerms(terms: Map<Int, Double>, termsToMerge: Map<Int, Double>): Map<Int, Double> =
@@ -116,6 +117,14 @@ class Polynomial(val terms: Map<Int, Double>) {
                 else this.put(it.key, it.value)
             }
         }
+*/
+    // Variant using fold and mutable map
+    operator fun plus(other: Polynomial): Polynomial = Polynomial(other.terms.entries.fold(HashMap<Int,Double>(terms)) { map: HashMap<Int,Double>, entry ->
+        val v: Double? = map[entry.key]
+        if (v != null) map.put(entry.key, entry.value + v)
+        else map.put(entry.key, entry.value)
+        map
+    })
 
     override fun equals(other: Any?): Boolean{
         if (this === other) return true
@@ -131,5 +140,49 @@ class Polynomial(val terms: Map<Int, Double>) {
     override fun hashCode(): Int{
         return terms.hashCode()
     }
-
 }
+
+// Phone numbers to words
+// See: https://page.mi.fu-berlin.de/prechelt/Biblio/jccpprt_computer2000.pdf
+
+val menemonics = mapOf('2' to "ABC", '3' to "DEF", '4' to "GHI", '5' to "JKL",
+                       '6' to "MNO", '7' to "PQRS", '8' to "TUV", '9' to "WXYZ")
+
+val charCode = HashMap<Char, Char>().apply {
+    menemonics.entries.forEach {
+        val (digit, string) = it
+        string.forEach { this.put(it, digit) }
+    }
+}
+
+internal fun readDictionary(): Set<String> =
+        Object::class.java.getResource("/linuxwords.txt")
+                .readText(StandardCharsets.UTF_8).lines()
+                .filter { it.length != 0 }
+                .filter { it.toList().all { it.isLetter() } }
+                .toSet()
+
+val words = readDictionary()
+
+val wordsForNum: Map<String, List<String>> =
+    words.groupBy { wordCode(it) }
+
+fun wordCode(word: String): String =
+    word.toList().map { charCode[it.toUpperCase()] }.joinToString("")
+
+
+fun toMnemonics(s: String): Set<String> =
+        if (s.length == 0) setOf("")
+        else HashSet<String>().apply {
+            for (i in 1..s.length) {
+                val subString = s.substring(0, i)
+                val words = wordsForNum[subString]
+                if (words != null) words.forEach { word ->
+                    val restSolutions = toMnemonics(s.substring(subString.length))
+                    restSolutions.forEach { rest ->
+                        this.add(word + rest)
+                    }
+                }
+            }
+        }
+

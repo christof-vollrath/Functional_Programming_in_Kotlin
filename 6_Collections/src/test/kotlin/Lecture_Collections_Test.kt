@@ -97,10 +97,10 @@ class Lecture_Collections_Test : FunSpec() { init {
 
     // Sets
     test("simple set") {
-        setOf("apple", "banana", "pear").contains("pear") shouldBe true
+        setOf("apple", "banana", "pear") should contain("pear")
     }
     test("Set from range") {
-        (1..3).toSet().contains(2) shouldBe true
+        (1..3).toSet() should contain(2)
     }
     test("Sets should not contain duplicates") {
         setOf(1,2,3,1).size shouldBe 3 // Duplicate 1 ignored
@@ -229,5 +229,31 @@ class Lecture_Collections_Test : FunSpec() { init {
         val p2 = Polynomial(0 to 3.0, 3 to 7.0)
         p1 + p2 shouldBe Polynomial(5 to 6.2, 3 to 11.0, 1 to 2.0, 0 to 3.0)
     }
-} }
+
+    // Phone numbers to words
+
+    test("toMnemonics") {
+        toMnemonics("7225247386") should contain("Scalaisfun")
+    }
+
+    test("readDictionary from file") {
+        words.size shouldBe 45374-20 // 20 words not contain only letters
+    }
+
+    test("charCode") {
+        charCode['A'] shouldBe '2'
+        charCode['C'] shouldBe '2'
+        charCode['Q'] shouldBe '7'
+        charCode['Z'] shouldBe '9'
+    }
+
+    test("wordCode") {
+        wordCode("Scalaisfun") shouldBe "7225247386"
+    }
+
+    test("wordsForNum") {
+        println(wordsForNum["72252"])
+        wordsForNum["72252"]?.contains("Scala") shouldBe true
+    }
+}}
 
