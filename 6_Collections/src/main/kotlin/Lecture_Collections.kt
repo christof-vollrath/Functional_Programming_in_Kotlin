@@ -155,14 +155,7 @@ val charCode = HashMap<Char, Char>().apply {
     }
 }
 
-internal fun readDictionary(): Set<String> =
-        Object::class.java.getResource("/linuxwords.txt")
-                .readText(StandardCharsets.UTF_8).lines()
-                .filter { it.length != 0 }
-                .filter { it.toList().all { it.isLetter() } }
-                .toSet()
-
-val words = readDictionary()
+val words = loadDictionary()
 
 val wordsForNum: Map<String, List<String>> =
     words.groupBy { wordCode(it) }

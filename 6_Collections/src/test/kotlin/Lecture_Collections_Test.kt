@@ -1,6 +1,6 @@
 import io.kotlintest.specs.FunSpec
 
-class Lecture_Collections_Test : FunSpec() { init {
+class Lecture_Collections_Test: FunSpec() { init {
 
     // Arrays used like lists
     test("Filter positive element in Array") {
@@ -238,7 +238,7 @@ class Lecture_Collections_Test : FunSpec() { init {
         translate("7225247386") should contain("Scala is fun")
     }
 
-    test("readDictionary from file") {
+    test("loadDictionary from file") {
         words.size shouldBe 45374-20 // 20 words not contain only letters
     }
 
