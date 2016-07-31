@@ -1,5 +1,3 @@
-package forcomp
-
 import loadDictionary
 import tail
 import java.util.*

@@ -1,6 +1,5 @@
 import rx.Observable
 import rx.lang.kotlin.observable
-import java.nio.charset.StandardCharsets
 import java.util.*
 
 // High-level test for prime

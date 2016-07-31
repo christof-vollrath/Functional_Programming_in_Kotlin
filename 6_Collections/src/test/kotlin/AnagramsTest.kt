@@ -1,5 +1,3 @@
-package forcomp
-
 import io.kotlintest.specs.FunSpec
 
 class AnagramsSuite: FunSpec() { init {
@@ -19,15 +17,15 @@ class AnagramsSuite: FunSpec() { init {
 
     test("create dictionaryByOccurrences") {
         val map = createDictionaryByOccurences(listOf("ate", "eat", "tea"))
-        map.get(listOf(Pair('a', 1), Pair('e', 1), Pair('t', 1))) shouldBe listOf("ate", "eat", "tea")
+        map[listOf(Pair('a', 1), Pair('e', 1), Pair('t', 1))] shouldBe listOf("ate", "eat", "tea")
     }
 
     test("dictionaryByOccurrences.get: eat") {
-        dictionaryByOccurrences.get(listOf(Pair('a', 1), Pair('e', 1), Pair('t', 1)))?.toSet() shouldBe setOf("ate", "eat", "tea")
+        dictionaryByOccurrences[listOf(Pair('a', 1), Pair('e', 1), Pair('t', 1))]?.toSet() shouldBe setOf("ate", "eat", "tea")
     }
 
     test("dictionaryByOccurrences.get: rulez") {
-        dictionaryByOccurrences.get(listOf(Pair('e', 1), Pair('l', 1), Pair('r', 1), Pair('u', 1), Pair('z', 1)))?.toSet() shouldBe setOf("rulez")
+        dictionaryByOccurrences[listOf(Pair('e', 1), Pair('l', 1), Pair('r', 1), Pair('u', 1), Pair('z', 1))]?.toSet() shouldBe setOf("rulez")
     }
 
     test("word anagrams: married") {
