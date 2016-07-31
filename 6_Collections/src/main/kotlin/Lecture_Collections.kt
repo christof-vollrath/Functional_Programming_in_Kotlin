@@ -171,18 +171,21 @@ fun wordCode(word: String): String =
     word.toList().map { charCode[it.toUpperCase()] }.joinToString("")
 
 
-fun toMnemonics(s: String): Set<String> =
-        if (s.length == 0) setOf("")
-        else HashSet<String>().apply {
+fun toMnemonics(s: String): Set<List<String>> =
+        if (s.length == 0) setOf(emptyList())
+        else HashSet<List<String>>().apply {
             for (i in 1..s.length) {
                 val subString = s.substring(0, i)
                 val words = wordsForNum[subString]
                 words?.forEach { word ->
                     val restSolutions = toMnemonics(s.substring(subString.length))
                     restSolutions.forEach { rest ->
-                        this.add(word + rest)
+                        this.add(listOf(word) + rest)
                     }
                 }
             }
         }
+
+fun translate(s: String): Set<String> =
+        toMnemonics(s).toList().map { it.joinToString(" ") }.toSet()
 

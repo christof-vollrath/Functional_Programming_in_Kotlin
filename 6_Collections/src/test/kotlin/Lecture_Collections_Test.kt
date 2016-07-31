@@ -231,7 +231,11 @@ class Lecture_Collections_Test : FunSpec() { init {
     // Phone numbers to words
 
     test("toMnemonics") {
-        toMnemonics("7225247386") should contain("Scalaisfun")
+        toMnemonics("7225247386") should contain(listOf("Scala","is","fun"))
+    }
+
+    test("translate") {
+        translate("7225247386") should contain("Scala is fun")
     }
 
     test("readDictionary from file") {
