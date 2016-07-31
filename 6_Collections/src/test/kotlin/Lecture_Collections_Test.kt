@@ -1,6 +1,4 @@
 import io.kotlintest.specs.FunSpec
-import java.util.*
-import java.lang.Math.*
 
 class Lecture_Collections_Test : FunSpec() { init {
 
@@ -181,12 +179,12 @@ class Lecture_Collections_Test : FunSpec() { init {
 
     test("Sort list") {
         val fruits = listOf("apple", "pear", "orange", "pineapple")
-        fruits.groupBy { it.get(0) } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
+        fruits.groupBy { it[0] } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
     }
 
     test("Group list") {
         val fruits = listOf("apple", "pear", "orange", "pineapple")
-        fruits.groupBy { it.get(0) } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
+        fruits.groupBy { it[0] } shouldBe mapOf('a' to listOf("apple"), 'p' to listOf("pear", "pineapple"), 'o' to listOf("orange"))
     }
 
     // Variable arguments

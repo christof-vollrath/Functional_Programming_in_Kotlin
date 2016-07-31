@@ -90,9 +90,4 @@ class IntSetTest {
     @Test fun typeOfParam_for_ConsList() {
         assertEquals("Cons", typeOfParam(singleton(1)))
     }
-
-    @Test fun facatory_for_Int() {
-        val o = factory<Int>()
-    }
-
 }
