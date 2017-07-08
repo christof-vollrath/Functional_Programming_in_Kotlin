@@ -146,7 +146,7 @@ fun combinations(occurrences: List<Pair<Char, Int>>): List<List<Pair<Char, Int>>
 fun subtract(x: List<Pair<Char, Int>>, y: List<Pair<Char, Int>>): List<Pair<Char, Int>> =
     if (x.isEmpty()) emptyList()
     else {
-        val subtractMap = HashMap<Char, Int>(); subtractMap.putAll(y)
+        val subtractMap = y.toMap()
         LinkedList<Pair<Char, Int>>().apply {
             x.forEach {
                 val (c, n) = it
@@ -203,7 +203,7 @@ fun occurrencesAnagrams(occurrences: List<Pair<Char, Int>>): List<List<String>> 
     else LinkedList<List<String>>().apply {
         combinations(occurrences).forEach { firstOccurrences ->
             val wordList = dictionaryByOccurrences[firstOccurrences]
-            if (wordList != null && wordList.size > 0) {
+            if (wordList != null && !wordList.isEmpty()) {
                 val nextOccurrences = subtract(occurrences, firstOccurrences)
                 wordList.forEach() { word ->
                     if (nextOccurrences.isEmpty())
